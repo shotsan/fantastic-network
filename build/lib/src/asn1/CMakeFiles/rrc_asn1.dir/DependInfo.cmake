@@ -1,0 +1,25 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
+# The set of languages for which implicit dependencies are needed:
+set(CMAKE_DEPENDS_LANGUAGES
+  )
+
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/asn1/rrc_asn1.cc" "lib/src/asn1/CMakeFiles/rrc_asn1.dir/rrc_asn1.cc.o" "gcc" "lib/src/asn1/CMakeFiles/rrc_asn1.dir/rrc_asn1.cc.o.d"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/asn1/rrc_asn1_enum.cc" "lib/src/asn1/CMakeFiles/rrc_asn1.dir/rrc_asn1_enum.cc.o" "gcc" "lib/src/asn1/CMakeFiles/rrc_asn1.dir/rrc_asn1_enum.cc.o.d"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/asn1/rrc_asn1_nbiot.cc" "lib/src/asn1/CMakeFiles/rrc_asn1.dir/rrc_asn1_nbiot.cc.o" "gcc" "lib/src/asn1/CMakeFiles/rrc_asn1.dir/rrc_asn1_nbiot.cc.o.d"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/asn1/rrc_asn1_utils.cc" "lib/src/asn1/CMakeFiles/rrc_asn1.dir/rrc_asn1_utils.cc.o" "gcc" "lib/src/asn1/CMakeFiles/rrc_asn1.dir/rrc_asn1_utils.cc.o.d"
+  )
+
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/asn1/CMakeFiles/asn1_utils.dir/DependInfo.cmake"
+  "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/common/CMakeFiles/srslte_common.dir/DependInfo.cmake"
+  "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/CMakeFiles/srslte_phy.dir/DependInfo.cmake"
+  )
+
+# Fortran module output directory.
+set(CMAKE_Fortran_TARGET_MODULE_DIR "")

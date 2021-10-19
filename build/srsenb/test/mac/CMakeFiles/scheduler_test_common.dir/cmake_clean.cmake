@@ -1,0 +1,11 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/scheduler_test_common.dir/scheduler_test_common.cc.o"
+  "CMakeFiles/scheduler_test_common.dir/scheduler_test_common.cc.o.d"
+  "libscheduler_test_common.a"
+  "libscheduler_test_common.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/scheduler_test_common.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

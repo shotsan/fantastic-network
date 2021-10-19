@@ -1,6 +1,12 @@
 {
     "files.associations": {
         "iostream": "cpp",
-        "ra_dl.h": "c"
+        "ra_dl.h": "c",
+        "*.tcc": "cpp",
+        "unordered_map": "cpp",
+        "fstream": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "sstream": "cpp"
     }
 }

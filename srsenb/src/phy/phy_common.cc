@@ -127,7 +127,7 @@ void phy_common::set_ul_grants(uint32_t tti, const stack_interface_phy_lte::ul_s
 void phy_common::worker_end(void*                tx_sem_id,
                             srslte::rf_buffer_t& buffer,
                             uint32_t             nof_samples,
-                            srslte_timestamp_t   tx_time)
+                            srslte_timestamp_t   tx_time, bool flag)
 {
   // Wait for the green light to transmit in the current TTI
   semaphore.wait(tx_sem_id);

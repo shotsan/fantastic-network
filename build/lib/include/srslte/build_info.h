@@ -43,7 +43,7 @@ extern "C" {
 #endif
 
 // the configured build options for srsLTE
-static char build_info[] = "commit  on branch ";
+static char build_info[] = "commit 1fa327d on branch testing";
 
 SRSLTE_API char* srslte_get_build_info() {
   return build_info;

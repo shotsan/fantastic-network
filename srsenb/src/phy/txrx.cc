@@ -133,7 +133,7 @@ void txrx::run_thread()
           buffer.set(rf_port, p, worker_com->get_nof_ports(0), worker->get_buffer_rx(cc, p));
         }
       }
-
+      
       radio_h->rx_now(buffer, sf_len, &rx_time);
 
       if (ul_channel) {
@@ -144,7 +144,7 @@ void txrx::run_thread()
       srslte_timestamp_copy(&tx_time, &rx_time);
       srslte_timestamp_add(&tx_time, 0, FDD_HARQ_DELAY_UL_MS * 1e-3);
 
-      Debug("Setting TTI=%d, tx_mutex=%d, tx_time=%ld:%f to worker %d\n",
+      log_h->debug("Setting TTI=%d, tx_mutex=%d, tx_time=%ld:%f to worker %d\n",
             tti,
             tx_worker_cnt,
             tx_time.full_secs,

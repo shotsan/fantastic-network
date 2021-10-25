@@ -184,6 +184,8 @@ static int get_pucch(srslte_enb_ul_t* q, srslte_ul_sf_cfg_t* ul_sf, srslte_pucch
 
   // Select format
   cfg->format = srslte_pucch_proc_select_format(&q->cell, cfg, &cfg->uci_cfg, NULL);
+  if(cfg->format==1)
+  printf("\n Enb ul.c pucch format %d",cfg->format);
   if (cfg->format == SRSLTE_PUCCH_FORMAT_ERROR) {
     ERROR("Returned Error while selecting PUCCH format\n");
     return SRSLTE_ERROR;

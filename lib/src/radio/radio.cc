@@ -226,7 +226,7 @@ bool radio::rx_now(rf_buffer_interface& buffer, const uint32_t& nof_samples, srs
     log_h->error("Mapping logical channels to physical channels for transmission\n");
     return false;
   }
-
+  //printf("\n I am here %lu %f",*full_secs,*frac_secs);
   if (srslte_rf_recv_with_time_multi(&rf_device, radio_buffers, nof_samples, true, full_secs, frac_secs) > 0) {
     ret = true;
   } else {
@@ -260,7 +260,7 @@ bool radio::has_rssi()
   return srslte_rf_has_rssi(&rf_device);
 }
 
-bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const srslte_timestamp_t& tx_time_)
+bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const srslte_timestamp_t& tx_time_, bool flag)
 {
   uint32_t nof_samples   = nof_samples_;
   uint32_t sample_offset = 0;
@@ -328,11 +328,20 @@ bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const 
       }
     }
   }
+  
 
   // Save possible end of burst time
   srslte_timestamp_copy(&end_of_burst_time, &tx_time);
   srslte_timestamp_add(&end_of_burst_time, 0, (double)nof_samples / cur_tx_srate);
-
+  if (flag==true)
+  { 
+    srslte_timestamp_t tf;
+    tf.frac_secs=0;
+    tf.full_secs=0;
+    printf("\n TTI time %ld.%f",tx_time.full_secs,tx_time.frac_secs);
+    srslte_rf_get_time(&rf_device,&tf.full_secs,&tf.frac_secs);
+    log_h->console("time tti %ld.%f", tf.full_secs,tf.frac_secs );
+  }
   void* radio_buffers[SRSLTE_MAX_CHANNELS] = {};
   if (!map_channels(rx_channel_mapping, sample_offset, buffer, radio_buffers)) {
     log_h->error("Mapping logical channels to physical channels for transmission\n");

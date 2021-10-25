@@ -180,7 +180,7 @@ public:
     }
   }
 
-  bool tx(srslte::rf_buffer_interface& buffer, const uint32_t& nof_samples, const srslte_timestamp_t& tx_time) override
+  bool tx(srslte::rf_buffer_interface& buffer, const uint32_t& nof_samples, const srslte_timestamp_t& tx_time, bool flag) override
   {
     int err = SRSLTE_SUCCESS;
 

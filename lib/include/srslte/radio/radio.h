@@ -168,13 +168,13 @@ public:
 
   // trx functions
   void tx_end() override;
-  bool tx(rf_buffer_interface& buffer, const uint32_t& nof_samples, const srslte_timestamp_t& tx_time) override;
+  bool tx(rf_buffer_interface& buffer, const uint32_t& nof_samples, const srslte_timestamp_t& tx_time, bool flag) override;
   bool rx_now(rf_buffer_interface& buffer, const uint32_t& nof_samples, srslte_timestamp_t* rxd_time) override;
 
   // setter
   void set_tx_freq(const uint32_t& carrier_idx, const double& freq) override;
   void set_rx_freq(const uint32_t& carrier_idx, const double& freq) override;
-  void release_freq(const uint32_t& carrier_idx) override;
+  void release_freq(const uint32_t& carrier_idx) override;  
 
   void set_tx_gain(const float& gain) override;
   void set_rx_gain_th(const float& gain) override;

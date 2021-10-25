@@ -428,7 +428,7 @@ int main(int argc, char** argv)
       for (uint32_t r = 0; r < nof_radios; r++) {
         srslte_timestamp_copy(&ts_tx, &ts_rx[r]);
         srslte_timestamp_add(&ts_tx, 0, 0.004);
-        radio_h[r]->tx(rf_buffers[r], frame_size, ts_tx);
+        radio_h[r]->tx(rf_buffers[r], frame_size, ts_tx, false);
       }
     }
 

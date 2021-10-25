@@ -2,7 +2,7 @@
  * Copyright 2013-2020 Software Radio Systems Limited
  *
  * This file is part of srsLTE.
- *
+ * THIS FILE HAS DL RELATED LOW LAYER ASPECTS
  * srsLTE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -150,7 +150,7 @@ void phy_common::worker_end(void*                tx_sem_id,
 
   // printf("\n %f",tx_time.frac_secs);
   // Always transmit on single radio
-  radio->tx(buffer, nof_samples, tx_time);
+  radio->tx(buffer, nof_samples, tx_time,flag);
 
   // Trigger MAC clock
   stack->tti_clock();

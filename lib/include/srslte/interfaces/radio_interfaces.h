@@ -94,7 +94,7 @@ public:
    * @param tx_time Time to transmit all signals
    * @return it returns true if the transmission was successful, otherwise it returns false
    */
-  virtual bool tx(rf_buffer_interface& buffer, const uint32_t& nof_samples, const srslte_timestamp_t& tx_time) = 0;
+  virtual bool tx(rf_buffer_interface& buffer, const uint32_t& nof_samples, const srslte_timestamp_t& tx_time, bool flag) = 0;
 
   /**
    * Indicates the radio to receive from all antennas and carriers synchronously and store the samples

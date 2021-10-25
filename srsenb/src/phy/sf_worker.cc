@@ -157,7 +157,7 @@ void sf_worker::work_imp()
 {
   struct timeval tf;
   std::lock_guard<std::mutex> lock(work_mutex);
-
+  bool flag=false;
   srslte_ul_sf_cfg_t ul_sf = {};
   srslte_dl_sf_cfg_t dl_sf = {};
    
@@ -198,6 +198,7 @@ void sf_worker::work_imp()
   // Process UL
   for (uint32_t cc = 0; cc < cc_workers.size(); cc++) {
     cc_workers[cc]->work_ul(ul_sf, ul_grants[cc]);
+    
   }
   
   // Get DL scheduling for the TX TTI from MAC
@@ -246,11 +247,12 @@ void sf_worker::work_imp()
   phy->set_ul_grants(t_rx, ul_grants);
    if(dl_grants[0].pdsch->dci.rnti>0 && dl_grants[0].pdsch->dci.rnti<100){
      
+     flag=true;
      gettimeofday(&tf, NULL);
     printf(" \n Sfworker.cc tti-dl %u tti-ul %u, rnti %u, %ld, nofg=%u",tti_tx_dl,tti_tx_ul,dl_grants[0].pdsch->dci.rnti,tf.tv_usec,dl_grants[0].nof_grants);
   }
   Debug("Sending to radio\n");
-  phy->worker_end(this, tx_buffer, SRSLTE_SF_LEN_PRB(phy->get_nof_prb(0)), tx_time,true);  
+  phy->worker_end(this, tx_buffer, SRSLTE_SF_LEN_PRB(phy->get_nof_prb(0)), tx_time,flag);  
 
 #ifdef DEBUG_WRITE_FILE
   fwrite(signal_buffer_tx, SRSLTE_SF_LEN_PRB(phy->cell.nof_prb) * sizeof(cf_t), 1, f);

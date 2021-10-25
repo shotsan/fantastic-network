@@ -415,6 +415,9 @@ FORCE_32BIT:BOOL=OFF
 //GCC compile for specific architecture.
 GCC_ARCH:STRING=native
 
+//Path to a program.
+GITCOMMAND:FILEPATH=/usr/bin/git
+
 //Path to a file.
 LIBCONFIGPP_INCLUDE_DIR:PATH=/usr/include
 
@@ -829,6 +832,8 @@ FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 FIND_PACKAGE_MESSAGE_DETAILS_UHD:INTERNAL=[/usr/lib/x86_64-linux-gnu/libuhd.so][/usr/include][v()]
 //Details about finding fftw3f
 FIND_PACKAGE_MESSAGE_DETAILS_fftw3f:INTERNAL=[/usr/lib/x86_64-linux-gnu/libfftw3f.so][/usr/include][v()]
+//ADVANCED property for variable: GITCOMMAND
+GITCOMMAND-ADVANCED:INTERNAL=1
 //Test HAVE_AVX
 HAVE_AVX:INTERNAL=1
 //Test HAVE_AVX2

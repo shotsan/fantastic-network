@@ -192,7 +192,7 @@ private:
     uint32_t get_count_late() { return count_late; }
 
     bool
-    tx(srslte::rf_buffer_interface& buffer, const uint32_t& nof_samples, const srslte_timestamp_t& tx_time) override
+    tx(srslte::rf_buffer_interface& buffer, const uint32_t& nof_samples, const srslte_timestamp_t& tx_time, bool flag) override
     {
       bool ret = true;
       notify_tx();

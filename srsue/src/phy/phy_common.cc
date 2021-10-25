@@ -543,7 +543,7 @@ void phy_common::worker_end(void*                tx_sem_id,
       ul_channel->run(buffer.to_cf_t(), buffer.to_cf_t(), nof_samples, tx_time);
     }
 
-    radio_h->tx(buffer, nof_samples, tx_time);
+    radio_h->tx(buffer, nof_samples, tx_time,false);
   } else {
     if (radio_h->is_continuous_tx()) {
       if (is_pending_tx_end) {
@@ -557,7 +557,7 @@ void phy_common::worker_end(void*                tx_sem_id,
             ul_channel->run(zeros_multi.to_cf_t(), zeros_multi.to_cf_t(), nof_samples, tx_time);
           }
 
-          radio_h->tx(zeros_multi, nof_samples, tx_time);
+          radio_h->tx(zeros_multi, nof_samples, tx_time,false);
         }
       }
     } else {

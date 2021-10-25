@@ -2,6 +2,7 @@
  * Copyright 2013-2020 Software Radio Systems Limited
  *
  * This file is part of srsLTE.
+*  THIS FILE HAS INTERFACE DEFINITION WITH HIGHER LAYERS AND INITIATES PHY
  *
  * srsLTE is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as

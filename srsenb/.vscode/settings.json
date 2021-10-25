@@ -7,6 +7,10 @@
         "fstream": "cpp",
         "istream": "cpp",
         "ostream": "cpp",
-        "sstream": "cpp"
-    }
+        "sstream": "cpp",
+        "rf_dev.h": "c",
+        "rf.h": "c",
+        "typeinfo": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

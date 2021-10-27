@@ -118,6 +118,16 @@ package_source:
 package_source/fast: package_source
 .PHONY : package_source/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/snap/cmake/936/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+.PHONY : rebuild_cache/fast
+
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
@@ -149,16 +159,6 @@ edit_cache:
 # Special rule for the target edit_cache
 edit_cache/fast: edit_cache
 .PHONY : edit_cache/fast
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/snap/cmake/936/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -192,25 +192,25 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-srsue/src/CMakeFiles/srsue.dir/rule:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 srsue/src/CMakeFiles/srsue.dir/rule
-.PHONY : srsue/src/CMakeFiles/srsue.dir/rule
+srsue/src/CMakeFiles/srsue_MIM.dir/rule:
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 srsue/src/CMakeFiles/srsue_MIM.dir/rule
+.PHONY : srsue/src/CMakeFiles/srsue_MIM.dir/rule
 
 # Convenience name for target.
-srsue: srsue/src/CMakeFiles/srsue.dir/rule
-.PHONY : srsue
+srsue_MIM: srsue/src/CMakeFiles/srsue_MIM.dir/rule
+.PHONY : srsue_MIM
 
 # fast build rule for target.
-srsue/fast:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/build
-.PHONY : srsue/fast
+srsue_MIM/fast:
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/build
+.PHONY : srsue_MIM/fast
 
 main.o: main.cc.o
 .PHONY : main.o
 
 # target to build an object file
 main.cc.o:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/main.cc.o
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/main.cc.o
 .PHONY : main.cc.o
 
 main.i: main.cc.i
@@ -218,7 +218,7 @@ main.i: main.cc.i
 
 # target to preprocess a source file
 main.cc.i:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/main.cc.i
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/main.cc.i
 .PHONY : main.cc.i
 
 main.s: main.cc.s
@@ -226,7 +226,7 @@ main.s: main.cc.s
 
 # target to generate assembly for a file
 main.cc.s:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/main.cc.s
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/main.cc.s
 .PHONY : main.cc.s
 
 metrics_csv.o: metrics_csv.cc.o
@@ -234,7 +234,7 @@ metrics_csv.o: metrics_csv.cc.o
 
 # target to build an object file
 metrics_csv.cc.o:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/metrics_csv.cc.o
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/metrics_csv.cc.o
 .PHONY : metrics_csv.cc.o
 
 metrics_csv.i: metrics_csv.cc.i
@@ -242,7 +242,7 @@ metrics_csv.i: metrics_csv.cc.i
 
 # target to preprocess a source file
 metrics_csv.cc.i:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/metrics_csv.cc.i
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/metrics_csv.cc.i
 .PHONY : metrics_csv.cc.i
 
 metrics_csv.s: metrics_csv.cc.s
@@ -250,7 +250,7 @@ metrics_csv.s: metrics_csv.cc.s
 
 # target to generate assembly for a file
 metrics_csv.cc.s:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/metrics_csv.cc.s
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/metrics_csv.cc.s
 .PHONY : metrics_csv.cc.s
 
 metrics_stdout.o: metrics_stdout.cc.o
@@ -258,7 +258,7 @@ metrics_stdout.o: metrics_stdout.cc.o
 
 # target to build an object file
 metrics_stdout.cc.o:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/metrics_stdout.cc.o
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/metrics_stdout.cc.o
 .PHONY : metrics_stdout.cc.o
 
 metrics_stdout.i: metrics_stdout.cc.i
@@ -266,7 +266,7 @@ metrics_stdout.i: metrics_stdout.cc.i
 
 # target to preprocess a source file
 metrics_stdout.cc.i:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/metrics_stdout.cc.i
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/metrics_stdout.cc.i
 .PHONY : metrics_stdout.cc.i
 
 metrics_stdout.s: metrics_stdout.cc.s
@@ -274,7 +274,7 @@ metrics_stdout.s: metrics_stdout.cc.s
 
 # target to generate assembly for a file
 metrics_stdout.cc.s:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/metrics_stdout.cc.s
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/metrics_stdout.cc.s
 .PHONY : metrics_stdout.cc.s
 
 ue.o: ue.cc.o
@@ -282,7 +282,7 @@ ue.o: ue.cc.o
 
 # target to build an object file
 ue.cc.o:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/ue.cc.o
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/ue.cc.o
 .PHONY : ue.cc.o
 
 ue.i: ue.cc.i
@@ -290,7 +290,7 @@ ue.i: ue.cc.i
 
 # target to preprocess a source file
 ue.cc.i:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/ue.cc.i
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/ue.cc.i
 .PHONY : ue.cc.i
 
 ue.s: ue.cc.s
@@ -298,7 +298,7 @@ ue.s: ue.cc.s
 
 # target to generate assembly for a file
 ue.cc.s:
-	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/ue.cc.s
+	cd /home/grads/s/sant1/Desktop/srsLTE/build && $(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/ue.cc.s
 .PHONY : ue.cc.s
 
 # Help Target
@@ -316,7 +316,7 @@ help:
 	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... test"
-	@echo "... srsue"
+	@echo "... srsue_MIM"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

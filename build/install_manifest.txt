@@ -233,12 +233,12 @@
 /usr/local/lib/libsrslte_rf.so
 /usr/local/include/srslte/version.h
 /usr/local/share/srslte/ue.conf.example
-/usr/local/bin/srsue
+/usr/local/bin/srsue_MIM
 /usr/local/share/srslte/enb.conf.example
 /usr/local/share/srslte/drb.conf.example
 /usr/local/share/srslte/rr.conf.example
 /usr/local/share/srslte/sib.conf.example
-/usr/local/bin/srsenb
+/usr/local/bin/srsenb_MIM
 /usr/local/share/srslte/epc.conf.example
 /usr/local/share/srslte/mbms.conf.example
 /usr/local/share/srslte/user_db.csv.example

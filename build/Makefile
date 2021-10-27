@@ -2701,17 +2701,17 @@ rlc_common_test/fast:
 .PHONY : rlc_common_test/fast
 
 #=============================================================================
-# Target rules for targets named srsue
+# Target rules for targets named srsue_MIM
 
 # Build rule for target.
-srsue: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 srsue
-.PHONY : srsue
+srsue_MIM: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 srsue_MIM
+.PHONY : srsue_MIM
 
 # fast build rule for target.
-srsue/fast:
-	$(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue.dir/build.make srsue/src/CMakeFiles/srsue.dir/build
-.PHONY : srsue/fast
+srsue_MIM/fast:
+	$(MAKE) $(MAKESILENT) -f srsue/src/CMakeFiles/srsue_MIM.dir/build.make srsue/src/CMakeFiles/srsue_MIM.dir/build
+.PHONY : srsue_MIM/fast
 
 #=============================================================================
 # Target rules for targets named srsue_phy
@@ -2896,17 +2896,17 @@ nas_test/fast:
 .PHONY : nas_test/fast
 
 #=============================================================================
-# Target rules for targets named srsenb
+# Target rules for targets named srsenb_MIM
 
 # Build rule for target.
-srsenb: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 srsenb
-.PHONY : srsenb
+srsenb_MIM: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 srsenb_MIM
+.PHONY : srsenb_MIM
 
 # fast build rule for target.
-srsenb/fast:
-	$(MAKE) $(MAKESILENT) -f srsenb/src/CMakeFiles/srsenb.dir/build.make srsenb/src/CMakeFiles/srsenb.dir/build
-.PHONY : srsenb/fast
+srsenb_MIM/fast:
+	$(MAKE) $(MAKESILENT) -f srsenb/src/CMakeFiles/srsenb_MIM.dir/build.make srsenb/src/CMakeFiles/srsenb_MIM.dir/build
+.PHONY : srsenb_MIM/fast
 
 #=============================================================================
 # Target rules for targets named enb_cfg_parser
@@ -3345,7 +3345,7 @@ help:
 	@echo "... scrambling_test"
 	@echo "... sequence_test"
 	@echo "... soft_demod_test"
-	@echo "... srsenb"
+	@echo "... srsenb_MIM"
 	@echo "... srsenb_mac"
 	@echo "... srsenb_phy"
 	@echo "... srsenb_rrc"
@@ -3388,7 +3388,7 @@ help:
 	@echo "... srslte_upper"
 	@echo "... srslte_utils"
 	@echo "... srsmbms"
-	@echo "... srsue"
+	@echo "... srsue_MIM"
 	@echo "... srsue_mac"
 	@echo "... srsue_phy"
 	@echo "... srsue_rrc"

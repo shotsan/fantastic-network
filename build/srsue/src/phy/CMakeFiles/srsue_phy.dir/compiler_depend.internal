@@ -3018,7 +3018,6 @@ srsue/src/phy/CMakeFiles/srsue_phy.dir/sf_worker.cc.o
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h
  /usr/include/x86_64-linux-gnu/bits/unistd.h
  /home/grads/s/sant1/Desktop/srsLTE/lib/include/srslte/interfaces/pdcp_interface_types.h
- /home/grads/s/sant1/Desktop/srsLTE/srsue/hdr/phy/sf_worker.h
  /home/grads/s/sant1/Desktop/srsLTE/srsue/hdr/phy/cc_worker.h
  /home/grads/s/sant1/Desktop/srsLTE/srsue/hdr/phy/phy_common.h
  /home/grads/s/sant1/Desktop/srsLTE/srsue/hdr/phy/phy_metrics.h
@@ -3030,6 +3029,8 @@ srsue/src/phy/CMakeFiles/srsue_phy.dir/sf_worker.cc.o
  /home/grads/s/sant1/Desktop/srsLTE/lib/include/srslte/radio/radio_metrics.h
  /home/grads/s/sant1/Desktop/srsLTE/lib/include/srslte/common/trace.h
  /home/grads/s/sant1/Desktop/srsLTE/srsue/hdr/phy/ta_control.h
+ /home/grads/s/sant1/Desktop/srsLTE/srsue/hdr/phy/sf_worker.h
+ /home/grads/s/sant1/Desktop/srsLTE/srsue/hdr/phy/cc_worker.h
  /home/grads/s/sant1/Desktop/srsLTE/lib/include/srslte/common/thread_pool.h
 
 srsue/src/phy/CMakeFiles/srsue_phy.dir/sync.cc.o

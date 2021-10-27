@@ -3011,7 +3011,6 @@ srsue/src/phy/CMakeFiles/srsue_phy.dir/sf_worker.cc.o: ../srsue/src/phy/sf_worke
   /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
   /usr/include/x86_64-linux-gnu/bits/unistd.h \
   ../lib/include/srslte/interfaces/pdcp_interface_types.h \
-  ../srsue/hdr/phy/sf_worker.h \
   ../srsue/hdr/phy/cc_worker.h \
   ../srsue/hdr/phy/phy_common.h \
   ../srsue/hdr/phy/phy_metrics.h \
@@ -3023,6 +3022,8 @@ srsue/src/phy/CMakeFiles/srsue_phy.dir/sf_worker.cc.o: ../srsue/src/phy/sf_worke
   ../lib/include/srslte/radio/radio_metrics.h \
   ../lib/include/srslte/common/trace.h \
   ../srsue/hdr/phy/ta_control.h \
+  ../srsue/hdr/phy/sf_worker.h \
+  ../srsue/hdr/phy/cc_worker.h \
   ../lib/include/srslte/common/thread_pool.h
 
 srsue/src/phy/CMakeFiles/srsue_phy.dir/sync.cc.o: ../srsue/src/phy/sync.cc \

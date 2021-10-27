@@ -1,0 +1,10 @@
+
+ sfworker.cc l261 tx_time 0.382170 , 3, tti 4695, rnti 90
+ sfworker.cc l261 tx_time 0.390170 , 3, tti 4703, rnti 90
+ sfworker.cc l261 tx_time 0.410170 , 3, tti 4723, rnti 90
+ sfworker.cc l261 tx_time 0.418170 , 3, tti 4731, rnti 90
+ sfworker.cc l261 tx_time 0.426170 , 3, tti 4739, rnti 90
+ sfworker.cc l261 tx_time 0.642170 , 3, tti 4955, rnti 90
+ sfworker.cc l261 tx_time 0.650170 , 3, tti 4963, rnti 90
+ sfworker.cc l261 tx_time 0.342197 , 27, tti 8175, rnti 90
+ sfworker.cc l261 tx_time 0.350197 , 27, tti 8183, rnti 90

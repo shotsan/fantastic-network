@@ -1,10 +1,10 @@
-m_tmsi=608381113
+m_tmsi=608381114
 mcc=1
 mnc=1
 mme_group_id=1
 mme_code=26
-tx_count=12
-rx_count=9
+tx_count=15
+rx_count=11
 int_alg=1
 enc_alg=0
 ksi=0

@@ -1090,7 +1090,7 @@ static void gen_ack_fdd(const srslte_pdsch_ack_t* ack_info, srslte_uci_data_t* u
     //   corresponds to a PDSCH transmission or PDCCH/EPDCCH indicating downlink SPS release only on the
     //   primary cell, then the periodic CSI report is multiplexed with HARQ-ACK on PUCCH using PUCCH format 2/2a/2b
     drop_csi_report &= !(tb_count_cc0 == tb_count && ack_info->simul_cqi_ack);
-
+     
     // - else if the UE is configured with PUCCH format 3 and if the parameter simultaneousAckNackAndCQI-Format3-
     //   r11 provided by higher layers is set TRUE, and if PUCCH resource is determined according to subclause
     //   10.1.2.2.2, and
@@ -1108,7 +1108,7 @@ static void gen_ack_fdd(const srslte_pdsch_ack_t* ack_info, srslte_uci_data_t* u
       csi_report                    = false;
     }
   }
-
+  printf("\n no of tbs %d",nof_tb);
   // For each HARQ ACK/NACK feedback mode
   switch (ack_info->ack_nack_feedback_mode) {
 

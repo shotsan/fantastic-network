@@ -1,0 +1,3 @@
+ 
+ Sfworker.cc tti-dl 9614 tti-ul 9618, rnti 70, time 84.027278, nofg=1 
+ Sfworker.cc tti-dl 5822 tti-ul 5826, rnti 70, time 110.955278, nofg=1

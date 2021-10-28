@@ -160,7 +160,26 @@ void sf_worker::work_imp()
   bool flag=false;
   srslte_ul_sf_cfg_t ul_sf = {};
   srslte_dl_sf_cfg_t dl_sf = {};
-   
+    if(fp==NULL){
+  time_t rawtime;
+  struct tm * timeinfo;
+  char buffer [64];
+  time (&rawtime);
+  timeinfo = localtime (&rawtime);
+  /*char cwd[150];
+   if (getcwd(cwd, sizeof(cwd)) != NULL) {
+       printf("Current working dir: %s\n", cwd);
+   } else {
+       perror("getcwd() error");
+        
+   }*/
+  strftime (buffer,64,"enb/data_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
+  //strcat(cwd,buffer);
+  //printf("Current working dir: %s\n", buffer);
+  fp=fopen(buffer, "a");
+  if (!fp)
+    perror("fopen");
+  }
   // Get Transmission buffers
   srslte::rf_buffer_t tx_buffer = {};
   for (uint32_t cc = 0; cc < phy->get_nof_carriers(); cc++) {
@@ -248,8 +267,8 @@ void sf_worker::work_imp()
    if(dl_grants[0].pdsch->dci.rnti>0 && dl_grants[0].pdsch->dci.rnti<100){
      
      flag=true;
-     gettimeofday(&tf, NULL);
-    printf(" \n Sfworker.cc tti-dl %u tti-ul %u, rnti %u, %ld, nofg=%u",tti_tx_dl,tti_tx_ul,dl_grants[0].pdsch->dci.rnti,tf.tv_usec,dl_grants[0].nof_grants);
+     //gettimeofday(&tf, NULL);
+    fprintf(fp," \n Sfworker.cc tti-dl %u tti-ul %u, rnti %u, time %f, nofg=%u",tti_tx_dl,tti_tx_ul,dl_grants[0].pdsch->dci.rnti,tx_time.full_secs+tx_time.frac_secs,dl_grants[0].nof_grants);
   }
   Debug("Sending to radio\n");
   phy->worker_end(this, tx_buffer, SRSLTE_SF_LEN_PRB(phy->get_nof_prb(0)), tx_time,flag);  

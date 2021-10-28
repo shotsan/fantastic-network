@@ -51,11 +51,11 @@ public:
   void upd_config_dci(srslte_dci_cfg_t& dci_cfg);
   void set_crnti(uint16_t rnti);
   void enable_pregen_signals(bool enabled);
-
+  
   bool work_dl_regular();
   bool work_dl_mbsfn(srslte_mbsfn_cfg_t mbsfn_cfg);
   bool work_ul(srslte_uci_data_t* uci_data);
-
+  bool ul_grant_availability();
   int read_ce_abs(float* ce_abs, uint32_t tx_antenna, uint32_t rx_antenna);
   int read_pdsch_d(cf_t* pdsch_d);
 
@@ -103,7 +103,8 @@ private:
   cf_t*    signal_buffer_rx[SRSLTE_MAX_PORTS] = {};
   cf_t*    signal_buffer_tx[SRSLTE_MAX_PORTS] = {};
   uint32_t signal_buffer_max_samples          = 0;
-
+  bool ack_flag=false;
+  
   /* Objects for DL */
   srslte_ue_dl_t     ue_dl     = {};
   srslte_ue_dl_cfg_t ue_dl_cfg = {};

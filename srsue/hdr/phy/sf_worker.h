@@ -111,7 +111,8 @@ private:
 
   uint32_t           tti         = 0;
   srslte_timestamp_t tx_time     = {};
-
+  uint16_t rnti=0;
+  FILE *fp=NULL;
   uint32_t rssi_read_cnt = 0;
 };
 

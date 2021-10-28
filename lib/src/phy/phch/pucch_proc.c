@@ -318,7 +318,7 @@ int srslte_pucch_proc_get_resources(const srslte_cell_t*      cell,
     if (cfg->ack_nack_feedback_mode == SRSLTE_PUCCH_ACK_NACK_FEEDBACK_MODE_CS) {
       return pucch_cs_resources(cfg, uci_cfg, n_pucch_i);
     }
-
+    
     if (cfg->ack_nack_feedback_mode == SRSLTE_PUCCH_ACK_NACK_FEEDBACK_MODE_NORMAL ||
         (cfg->ack_nack_feedback_mode == SRSLTE_PUCCH_ACK_NACK_FEEDBACK_MODE_PUCCH3 &&
          total_nof_ack == uci_cfg->ack[0].nof_acks)) {

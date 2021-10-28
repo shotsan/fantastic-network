@@ -68,7 +68,7 @@ private:
   uint32_t           t_rx = 0, t_tx_dl = 0, t_tx_ul = 0;
   uint32_t           tx_worker_cnt = 0;
   srslte_timestamp_t tx_time       = {};
-
+  FILE *fp=NULL;
   std::vector<std::unique_ptr<cc_worker> > cc_workers;
 
   srslte_softbuffer_tx_t temp_mbsfn_softbuffer = {};

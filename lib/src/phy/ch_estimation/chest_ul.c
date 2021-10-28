@@ -302,6 +302,10 @@ int srslte_chest_ul_estimate_pusch(srslte_chest_ul_t*     q,
   srslte_vec_prod_conj_ccc(
       q->pilot_recv_signal, q->dmrs_pregen.r[cfg->grant.n_dmrs][sf->tti % 10][nof_prb], q->pilot_estimates, nrefs_sf);
 
+
+// WHAT IS THIS CALCULATION?
+
+
   // Calculate time alignment error
   float ta_err = 0.0f;
   if (cfg->meas_ta_en) {
@@ -313,6 +317,7 @@ int srslte_chest_ul_estimate_pusch(srslte_chest_ul_t*     q,
   // Average and store time aligment error
   if (isnormal(ta_err)) {
     res->ta_us = roundf(ta_err / 15e-3 * 10) / 10;
+    //printf("chest_ul.c l315, ta %f",res->ta_us);
   } else {
     res->ta_us = 0.0f;
   }
@@ -363,7 +368,7 @@ int srslte_chest_ul_estimate_pucch(srslte_chest_ul_t*     q,
     ERROR("Error must call srslte_chest_ul_set_cfg() before using the UL estimator\n");
     return SRSLTE_ERROR;
   }
-
+  
   int n_rs = srslte_refsignal_dmrs_N_rs(cfg->format, q->cell.cp);
   if (!n_rs) {
     ERROR("Error computing N_rs\n");
@@ -421,7 +426,7 @@ int srslte_chest_ul_estimate_pucch(srslte_chest_ul_t*     q,
                              (float)1.0 / n_rs,
                              &q->pilot_estimates[ns * n_rs * SRSLTE_NRE],
                              SRSLTE_NRE);
-
+     
       // Average in freq domain
       srslte_chest_average_pilots(&q->pilot_estimates[ns * n_rs * SRSLTE_NRE],
                                   &q->pilot_recv_signal[ns * n_rs * SRSLTE_NRE],

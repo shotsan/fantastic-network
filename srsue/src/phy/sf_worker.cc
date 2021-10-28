@@ -21,7 +21,7 @@
 
 #include "srslte/interfaces/ue_interfaces.h"
 #include "srslte/srslte.h"
-
+#include "srsue/hdr/phy/cc_worker.h"
 #include "srsue/hdr/phy/sf_worker.h"
 #include <string.h>
 #include <unistd.h>
@@ -154,8 +154,9 @@ void sf_worker::set_cfo(const uint32_t& cc_idx, float cfo)
   cc_workers[cc_idx]->set_cfo(cfo);
 }
 
-void sf_worker::set_crnti(uint16_t rnti)
+void sf_worker::set_crnti(uint16_t rnti1)
 {
+  rnti=rnti1;
   std::lock_guard<std::mutex> lock(mutex);
   for (auto& cc_worker : cc_workers) {
     cc_worker->set_crnti(rnti);
@@ -202,11 +203,32 @@ void sf_worker::work_imp()
   if (!cell_initiated) {
     phy->worker_end(this, false, tx_signal_ptr, 0, tx_time);
   }
-
+  bool flag =false;
   bool     rx_signal_ok    = false;
   bool     tx_signal_ready = false;
   uint32_t nof_samples     = SRSLTE_SF_LEN_PRB(cell.nof_prb);
-
+  
+  
+ if(fp==NULL){
+  time_t rawtime;
+  struct tm * timeinfo;
+  char buffer [64];
+  time (&rawtime);
+  timeinfo = localtime (&rawtime);
+  /*char cwd[150];
+   if (getcwd(cwd, sizeof(cwd)) != NULL) {
+       printf("Current working dir: %s\n", cwd);
+   } else {
+       perror("getcwd() error");
+        
+   }*/
+  strftime (buffer,64,"ue/data_%b_%d_%H_%M_%S.txt",timeinfo);//generate string SA_TEST_DATE_TIME
+  //strcat(cwd,buffer);
+  //printf("Current working dir: %s\n", buffer);
+  fp=fopen(buffer, "a");
+  if (!fp)
+    perror("fopen");
+  }
   {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -229,43 +251,51 @@ void sf_worker::work_imp()
         }
       }
     }
-
+   
     /***** Uplink Generation + Transmission *******/
-
+    srslte_dci_ul_t                       dci_ul       = {};
+    uint32_t                              pid          = 0;
     /* If TTI+4 is an uplink subframe (TODO: Support short PRACH and SRS in UpPts special subframes) */
     if ((srslte_sfidx_tdd_type(tdd_config, TTI_TX(tti) % 10) == SRSLTE_TDD_SF_U) || cell.frame_type == SRSLTE_FDD) {
       // Generate Uplink signal if no PRACH pending
       if (!prach_ptr) {
-
+        
         // Common UCI data object for all carriers
         srslte_uci_data_t uci_data;
+        
         reset_uci(&uci_data);
-
+    
         // Loop through all carriers. Do in reverse order since control information from SCells is transmitted in PCell
         for (int carrier_idx = phy->args->nof_carriers - 1; carrier_idx >= 0; carrier_idx--) {
           tx_signal_ready |= cc_workers[carrier_idx]->work_ul(&uci_data);
-
+          flag = cc_workers[carrier_idx]->ul_grant_availability();
+          
           // Set signal pointer based on offset
           tx_signal_ptr.set((uint32_t)carrier_idx, 0, phy->args->nof_rx_ant, cc_workers[carrier_idx]->get_tx_buffer(0));
+          //printf("\n sf_worker.c l:251 ack valid %d ",uci_data.value.ack.valid);
         }
+         //phy->get_ul_pending_grant(&sf_cfg_ul, 0, &pid, &dci_ul);
+         
       }
     }
   }
 
+    if(flag)
+    fprintf(fp,"\n sfworker.cc l261 tx_time %f, tti %d, rnti %d",tx_time.frac_secs+tx_time.full_secs,tti,rnti);
   // Set PRACH buffer signal pointer
   if (prach_ptr) {
     tx_signal_ready = true;
     tx_signal_ptr.set(0, prach_ptr);
     prach_ptr = nullptr;
   }
-
+ 
   // Call worker_end to transmit the signal
   phy->worker_end(this, tx_signal_ready, tx_signal_ptr, nof_samples, tx_time);
-
+  
   if (rx_signal_ok) {
     update_measurements();
   }
-
+   
   // Call feedback loop for chest
   if (chest_loop && ((1U << (tti % 10U)) & phy->args->cfo_ref_mask)) {
     chest_loop->set_cfo(cc_workers[0]->get_ref_cfo());
@@ -311,7 +341,7 @@ void sf_worker::update_measurements()
       rssi_read_cnt = 0;
     }
   }
-
+ 
   // Run measurements in all carriers
   std::vector<rrc_interface_phy_lte::phy_meas_t> serving_cells = {};
   for (uint32_t cc_idx = 0; cc_idx < cc_workers.size(); cc_idx++) {

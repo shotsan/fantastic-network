@@ -338,9 +338,9 @@ bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const 
     srslte_timestamp_t tf;
     tf.frac_secs=0;
     tf.full_secs=0;
-    printf("\n TTI time %ld.%f",tx_time.full_secs,tx_time.frac_secs);
+    //printf("\n radio.cc l:341 TTI time %f",tx_time.full_secs+tx_time.frac_secs);
     srslte_rf_get_time(&rf_device,&tf.full_secs,&tf.frac_secs);
-    log_h->console("time tti %ld.%f", tf.full_secs,tf.frac_secs );
+    log_h->info("\n radio.cc l:343 current device time tti %f", tf.full_secs+tf.frac_secs );
   }
   void* radio_buffers[SRSLTE_MAX_CHANNELS] = {};
   if (!map_channels(rx_channel_mapping, sample_offset, buffer, radio_buffers)) {

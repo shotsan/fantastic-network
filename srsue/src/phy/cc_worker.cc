@@ -622,16 +622,17 @@ void cc_worker::update_measurements()
  *
  */
 
+
 bool cc_worker::work_ul(srslte_uci_data_t* uci_data)
 {
 
   bool signal_ready;
-
+  
   srslte_dci_ul_t                       dci_ul       = {};
   mac_interface_phy_lte::mac_grant_ul_t ul_mac_grant = {};
   mac_interface_phy_lte::tb_action_ul_t ul_action    = {};
   uint32_t                              pid          = 0;
-
+  
   bool ul_grant_available = phy->get_ul_pending_grant(&sf_cfg_ul, cc_idx, &pid, &dci_ul);
   ul_mac_grant.phich_available =
       phy->get_ul_received_ack(&sf_cfg_ul, cc_idx, &ul_mac_grant.hi_value, ul_grant_available ? nullptr : &dci_ul);
@@ -640,7 +641,7 @@ bool cc_worker::work_ul(srslte_uci_data_t* uci_data)
   if (!ul_grant_available) {
     pid = phy->ul_pidof(CURRENT_TTI_TX, &sf_cfg_ul.tdd_config);
   }
-
+  
   /* Generate CQI reports if required, note that in case both aperiodic
    * and periodic ones present, only aperiodic is sent (36.213 section 7.2) */
   if (ul_grant_available && dci_ul.cqi_request) {
@@ -712,6 +713,9 @@ bool cc_worker::work_ul(srslte_uci_data_t* uci_data)
     phich_grant.n_dmrs       = ue_ul_cfg.ul_cfg.pusch.grant.n_dmrs;
 
     phy->set_ul_pending_ack(&sf_cfg_ul, cc_idx, phich_grant, &dci_ul);
+    if(ul_grant_available)
+    ack_flag=true;
+   // printf("\n cc_worker l:717, flag =%d",ack_flag);
   }
 
   return signal_ready;
@@ -898,11 +902,28 @@ void cc_worker::set_uci_ack(srslte_uci_data_t* uci_data,
   ack_info.ack_nack_feedback_mode = ue_ul_cfg.ul_cfg.pucch.ack_nack_feedback_mode;
   ack_info.nof_cc                 = nof_configured_carriers;
   ack_info.transmission_mode      = ue_dl_cfg.cfg.tm;
-
+  ack_flag=true;
   // Generate ACK/NACK bits
+  
   srslte_ue_dl_gen_ack(&ue_dl.cell, &sf_cfg_dl, &ack_info, uci_data);
 }
 
+bool cc_worker::ul_grant_availability()
+{
+   bool flag=ack_flag;
+   ack_flag=false;
+   srslte_dci_ul_t                       dci_ul       = {};
+   uint32_t                              pid          = 0;
+   srslte_pdsch_ack_t ack_info                = {};
+  // flag=false;
+  // printf("\n Cc_Worker.c l628: %u",sf_cfg_ul.tti);
+     phy->get_dl_pending_ack(&sf_cfg_ul,0,&ack_info.cc[0]);
+     if(ack_info.cc[0].m[0].present)
+     printf("\n nof acks %d",ack_info.cc[0].m[0].present);
+  // phy->get_ul_pending_grant(&sf_cfg_ul, cc_idx, &pid, &dci_ul);
+   //  printf("ack mode %d",ack_info.ack_nack_feedback_mode);
+  return ack_info.cc[0].m[0].present;
+}
 /************
  *
  * Configuration Functions

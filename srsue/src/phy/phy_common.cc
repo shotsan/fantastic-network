@@ -347,6 +347,7 @@ void phy_common::set_ul_pending_grant(srslte_dl_sf_cfg_t* sf, uint32_t cc_idx, s
   }
 }
 
+//bool phy_common::get_dl_pending_grant
 // SF->TTI at which PUSCH should be transmitted
 bool phy_common::get_ul_pending_grant(srslte_ul_sf_cfg_t* sf, uint32_t cc_idx, uint32_t* pid, srslte_dci_ul_t* dci)
 {
@@ -501,7 +502,7 @@ bool phy_common::get_dl_pending_ack(srslte_ul_sf_cfg_t* sf, uint32_t cc_idx, srs
       ack->m[i].k        = k;
       ack->m[i].resource = pending_dl_ack[TTIMOD(pdsch_tti)][cc_idx].resource;
       memcpy(ack->m[i].value, pending_dl_ack[TTIMOD(pdsch_tti)][cc_idx].value, SRSLTE_MAX_CODEWORDS * sizeof(uint8_t));
-      Debug("Get dl pending ack for sf->tti=%d, i=%d, k=%d, pdsch_tti=%d, value=%d, ncce=%d, v_dai=%d\n",
+      log_h->info("Get dl pending ack for sf->tti=%d, i=%d, k=%d, pdsch_tti=%d, value=%d, ncce=%d, v_dai=%d\n",
             sf->tti,
             i,
             k,

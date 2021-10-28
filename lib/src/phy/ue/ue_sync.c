@@ -659,7 +659,7 @@ static int track_peak_ok(srslte_ue_sync_t* q, uint32_t track_idx)
     q->next_rf_sample_offset = (int)round(q->mean_sample_offset);
 
     if (q->next_rf_sample_offset) {
-      INFO("Time offset adjustment: %d samples (%.2f), mean SFO: %.2f Hz, ema=%f, length=%d\n",
+      INFO("ue_sync l:662, Time offset adjustment: %d samples (%.2f), mean SFO: %.2f Hz, ema=%f, length=%d\n",
            q->next_rf_sample_offset,
            q->mean_sample_offset,
            srslte_ue_sync_get_sfo(q),

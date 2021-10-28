@@ -1047,7 +1047,10 @@ int rf_uhd_recv_with_time_multi(void*    h,
     }
   }
   if (secs && frac_secs) {
+    //printf("\nrf_uhd_imp.c l:1050 %f",*frac_secs);
     uhd_rx_metadata_time_spec(handler->rx_md_first, secs, frac_secs);
+    
+   // printf("\nrf_uhd_imp.c %f",*frac_secs);
   }
   return rxd_samples_total;
 }

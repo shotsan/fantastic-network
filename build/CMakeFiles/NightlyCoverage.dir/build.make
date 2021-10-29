@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/cmake/936/bin/cmake
+CMAKE_COMMAND = /snap/cmake/955/bin/cmake
 
 # The command to remove a file.
-RM = /snap/cmake/936/bin/cmake -E rm -f
+RM = /snap/cmake/955/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -67,7 +67,7 @@ include CMakeFiles/NightlyCoverage.dir/compiler_depend.make
 include CMakeFiles/NightlyCoverage.dir/progress.make
 
 CMakeFiles/NightlyCoverage:
-	/snap/cmake/936/bin/ctest -D NightlyCoverage
+	/snap/cmake/955/bin/ctest -D NightlyCoverage
 
 NightlyCoverage: CMakeFiles/NightlyCoverage
 NightlyCoverage: CMakeFiles/NightlyCoverage.dir/build.make

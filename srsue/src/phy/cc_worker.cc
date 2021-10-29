@@ -20,7 +20,7 @@
  */
 
 #include "srslte/srslte.h"
-
+#include "srslte/phy/ue/ue_dl.h"
 #include "srsue/hdr/phy/cc_worker.h"
 
 #define Error(fmt, ...)                                                                                                \
@@ -713,8 +713,7 @@ bool cc_worker::work_ul(srslte_uci_data_t* uci_data)
     phich_grant.n_dmrs       = ue_ul_cfg.ul_cfg.pusch.grant.n_dmrs;
 
     phy->set_ul_pending_ack(&sf_cfg_ul, cc_idx, phich_grant, &dci_ul);
-    if(ul_grant_available)
-    ack_flag=true;
+    
    // printf("\n cc_worker l:717, flag =%d",ack_flag);
   }
 
@@ -902,9 +901,29 @@ void cc_worker::set_uci_ack(srslte_uci_data_t* uci_data,
   ack_info.ack_nack_feedback_mode = ue_ul_cfg.ul_cfg.pucch.ack_nack_feedback_mode;
   ack_info.nof_cc                 = nof_configured_carriers;
   ack_info.transmission_mode      = ue_dl_cfg.cfg.tm;
-  ack_flag=true;
+  //ack_flag=true;
   // Generate ACK/NACK bits
-  
+   uint32_t nof_tb = 1;
+  if (ack_info.transmission_mode > SRSLTE_TM2) {
+    nof_tb = SRSLTE_MAX_CODEWORDS;
+  }
+   uint32_t tb_count     = 0; // All transmissions
+  uint32_t tb_count_cc0 = 0; // Transmissions on PCell
+  for (uint32_t cc_idx = 0; cc_idx < ack_info.nof_cc; cc_idx++) {
+    for (uint32_t tb = 0; tb < nof_tb; tb++) {
+      if (ack_info.cc[cc_idx].m[0].present && ack_info.cc[cc_idx].m[0].value[tb] != 2) {
+        tb_count++;
+      }
+
+      // Save primary cell number of TB
+      if (cc_idx == 0) {
+        tb_count_cc0 = tb_count;
+        if(tb_count>0)
+        {ack_flag=true;}
+       // printf("\n tb %d",tb_count_cc0);}
+      }
+    }
+  }
   srslte_ue_dl_gen_ack(&ue_dl.cell, &sf_cfg_dl, &ack_info, uci_data);
 }
 
@@ -915,14 +934,14 @@ bool cc_worker::ul_grant_availability()
    srslte_dci_ul_t                       dci_ul       = {};
    uint32_t                              pid          = 0;
    srslte_pdsch_ack_t ack_info                = {};
-  // flag=false;
+   
   // printf("\n Cc_Worker.c l628: %u",sf_cfg_ul.tti);
-     phy->get_dl_pending_ack(&sf_cfg_ul,0,&ack_info.cc[0]);
-     if(ack_info.cc[0].m[0].present)
-     printf("\n nof acks %d",ack_info.cc[0].m[0].present);
+     //phy->get_dl_pending_ack(&sf_cfg_ul,0,&ack_info.cc[0]);
+     //if(ack_info.cc[0].m[0].present)
+     //printf("\n cc_worker.cc l:922 nof acks %d",ack_info.cc[0].m[0].present);
   // phy->get_ul_pending_grant(&sf_cfg_ul, cc_idx, &pid, &dci_ul);
    //  printf("ack mode %d",ack_info.ack_nack_feedback_mode);
-  return ack_info.cc[0].m[0].present;
+   return flag;
 }
 /************
  *

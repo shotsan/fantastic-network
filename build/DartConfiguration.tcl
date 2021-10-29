@@ -26,8 +26,8 @@ SubmitURL: http://my.cdash.org/submit.php?project=srsLTE
 NightlyStartTime: 00:00:00 GMT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/snap/cmake/936/bin/cmake" "/home/grads/s/sant1/Desktop/srsLTE"
-MakeCommand: /snap/cmake/936/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
+ConfigureCommand: "/snap/cmake/955/bin/cmake" "/home/grads/s/sant1/Desktop/srsLTE"
+MakeCommand: /snap/cmake/955/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
 DefaultCTestConfigurationType: Release
 
 # version control

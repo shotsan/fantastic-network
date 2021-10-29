@@ -1039,6 +1039,8 @@ ue_dl_gen_ack_fdd_all_spatial_bundling(const srslte_pdsch_ack_t* ack_info, srslt
 }
 
 /* UE downlink procedure for reporting HARQ-ACK bits in FDD, Section 7.3 36.213
+
+
  */
 static void gen_ack_fdd(const srslte_pdsch_ack_t* ack_info, srslte_uci_data_t* uci_data)
 {
@@ -1108,7 +1110,9 @@ static void gen_ack_fdd(const srslte_pdsch_ack_t* ack_info, srslte_uci_data_t* u
       csi_report                    = false;
     }
   }
-  printf("\n no of tbs %d",nof_tb);
+  // tbs_=nof_tb;
+  //*noftbs=nof_tb;
+  printf("\n ue_dl.c l:1111 no of tbs %d",nof_tb);
   // For each HARQ ACK/NACK feedback mode
   switch (ack_info->ack_nack_feedback_mode) {
 
@@ -1389,6 +1393,7 @@ void srslte_ue_dl_gen_ack(const srslte_cell_t*      cell,
                           const srslte_pdsch_ack_t* ack_info,
                           srslte_uci_data_t*        uci_data)
 {
+ // int noftbs=0;
   if (cell->frame_type == SRSLTE_FDD) {
     gen_ack_fdd(ack_info, uci_data);
   } else {

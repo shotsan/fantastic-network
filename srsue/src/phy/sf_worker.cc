@@ -281,7 +281,10 @@ void sf_worker::work_imp()
   }
 
     if(flag)
+    {
     fprintf(fp,"\n sfworker.cc l261 tx_time %f, tti %d, rnti %d",tx_time.frac_secs+tx_time.full_secs,tti,rnti);
+    flag=false;
+    }
   // Set PRACH buffer signal pointer
   if (prach_ptr) {
     tx_signal_ready = true;

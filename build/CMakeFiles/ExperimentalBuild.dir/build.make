@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/cmake/936/bin/cmake
+CMAKE_COMMAND = /snap/cmake/955/bin/cmake
 
 # The command to remove a file.
-RM = /snap/cmake/936/bin/cmake -E rm -f
+RM = /snap/cmake/955/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -67,7 +67,7 @@ include CMakeFiles/ExperimentalBuild.dir/compiler_depend.make
 include CMakeFiles/ExperimentalBuild.dir/progress.make
 
 CMakeFiles/ExperimentalBuild:
-	/snap/cmake/936/bin/ctest -D ExperimentalBuild
+	/snap/cmake/955/bin/ctest -D ExperimentalBuild
 
 ExperimentalBuild: CMakeFiles/ExperimentalBuild
 ExperimentalBuild: CMakeFiles/ExperimentalBuild.dir/build.make

@@ -65,11 +65,14 @@
 
 #define SRSLTE_MAX_DCI_MSG SRSLTE_MAX_CARRIERS
 
+
+
 typedef struct SRSLTE_API {
   srslte_dci_format_t   format;
   srslte_dci_location_t loc[MAX_CANDIDATES];
   uint32_t              nof_locations;
 } dci_blind_search_t;
+ 
 
 typedef struct SRSLTE_API {
   // Cell configuration

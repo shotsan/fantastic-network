@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/timeout_test.dir/timeout_test.cc.o"
-  "CMakeFiles/timeout_test.dir/timeout_test.cc.o.d"
-  "timeout_test"
   "timeout_test.pdb"
+  "timeout_test"
 )
 
 # Per-language clean rules from dependency scanning.

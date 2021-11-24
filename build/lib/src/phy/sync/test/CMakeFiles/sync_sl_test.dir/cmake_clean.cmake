@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/sync_sl_test.dir/sync_sl_test.c.o"
-  "CMakeFiles/sync_sl_test.dir/sync_sl_test.c.o.d"
-  "sync_sl_test"
   "sync_sl_test.pdb"
+  "sync_sl_test"
 )
 
 # Per-language clean rules from dependency scanning.

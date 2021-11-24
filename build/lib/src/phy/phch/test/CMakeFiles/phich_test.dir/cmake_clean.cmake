@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/phich_test.dir/phich_test.c.o"
-  "CMakeFiles/phich_test.dir/phich_test.c.o.d"
-  "phich_test"
   "phich_test.pdb"
+  "phich_test"
 )
 
 # Per-language clean rules from dependency scanning.

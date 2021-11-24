@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/turbodecoder_test.dir/turbodecoder_test.c.o"
-  "CMakeFiles/turbodecoder_test.dir/turbodecoder_test.c.o.d"
-  "turbodecoder_test"
   "turbodecoder_test.pdb"
+  "turbodecoder_test"
 )
 
 # Per-language clean rules from dependency scanning.

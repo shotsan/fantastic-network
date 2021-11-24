@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/layermap_test.dir/layermap_test.c.o"
-  "CMakeFiles/layermap_test.dir/layermap_test.c.o.d"
-  "layermap_test"
   "layermap_test.pdb"
+  "layermap_test"
 )
 
 # Per-language clean rules from dependency scanning.

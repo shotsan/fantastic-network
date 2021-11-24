@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/chest_test_ul.dir/chest_test_ul.c.o"
-  "CMakeFiles/chest_test_ul.dir/chest_test_ul.c.o.d"
-  "chest_test_ul"
   "chest_test_ul.pdb"
+  "chest_test_ul"
 )
 
 # Per-language clean rules from dependency scanning.

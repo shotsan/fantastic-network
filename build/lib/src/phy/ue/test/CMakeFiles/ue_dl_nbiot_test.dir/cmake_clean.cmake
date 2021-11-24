@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ue_dl_nbiot_test.dir/ue_dl_nbiot_test.c.o"
-  "CMakeFiles/ue_dl_nbiot_test.dir/ue_dl_nbiot_test.c.o.d"
-  "ue_dl_nbiot_test"
   "ue_dl_nbiot_test.pdb"
+  "ue_dl_nbiot_test"
 )
 
 # Per-language clean rules from dependency scanning.

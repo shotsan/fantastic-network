@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/pdsch_ue.dir/pdsch_ue.c.o"
-  "CMakeFiles/pdsch_ue.dir/pdsch_ue.c.o.d"
-  "pdsch_ue"
   "pdsch_ue.pdb"
+  "pdsch_ue"
 )
 
 # Per-language clean rules from dependency scanning.

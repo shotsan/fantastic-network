@@ -1,12 +1,9 @@
 file(REMOVE_RECURSE
   "CMakeFiles/srsue_rrc.dir/rrc.cc.o"
-  "CMakeFiles/srsue_rrc.dir/rrc.cc.o.d"
-  "CMakeFiles/srsue_rrc.dir/rrc_meas.cc.o"
-  "CMakeFiles/srsue_rrc.dir/rrc_meas.cc.o.d"
   "CMakeFiles/srsue_rrc.dir/rrc_procedures.cc.o"
-  "CMakeFiles/srsue_rrc.dir/rrc_procedures.cc.o.d"
-  "libsrsue_rrc.a"
+  "CMakeFiles/srsue_rrc.dir/rrc_meas.cc.o"
   "libsrsue_rrc.pdb"
+  "libsrsue_rrc.a"
 )
 
 # Per-language clean rules from dependency scanning.

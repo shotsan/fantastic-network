@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/arch_select.dir/arch_select.cc.o"
-  "CMakeFiles/arch_select.dir/arch_select.cc.o.d"
-  "arch_select"
   "arch_select.pdb"
+  "arch_select"
 )
 
 # Per-language clean rules from dependency scanning.

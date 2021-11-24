@@ -1,22 +1,14 @@
 file(REMOVE_RECURSE
   "CMakeFiles/srsenb_mac.dir/mac.cc.o"
-  "CMakeFiles/srsenb_mac.dir/mac.cc.o.d"
   "CMakeFiles/srsenb_mac.dir/scheduler.cc.o"
-  "CMakeFiles/srsenb_mac.dir/scheduler.cc.o.d"
   "CMakeFiles/srsenb_mac.dir/scheduler_carrier.cc.o"
-  "CMakeFiles/srsenb_mac.dir/scheduler_carrier.cc.o.d"
   "CMakeFiles/srsenb_mac.dir/scheduler_grid.cc.o"
-  "CMakeFiles/srsenb_mac.dir/scheduler_grid.cc.o.d"
   "CMakeFiles/srsenb_mac.dir/scheduler_harq.cc.o"
-  "CMakeFiles/srsenb_mac.dir/scheduler_harq.cc.o.d"
   "CMakeFiles/srsenb_mac.dir/scheduler_metric.cc.o"
-  "CMakeFiles/srsenb_mac.dir/scheduler_metric.cc.o.d"
   "CMakeFiles/srsenb_mac.dir/scheduler_ue.cc.o"
-  "CMakeFiles/srsenb_mac.dir/scheduler_ue.cc.o.d"
   "CMakeFiles/srsenb_mac.dir/ue.cc.o"
-  "CMakeFiles/srsenb_mac.dir/ue.cc.o.d"
-  "libsrsenb_mac.a"
   "libsrsenb_mac.pdb"
+  "libsrsenb_mac.a"
 )
 
 # Per-language clean rules from dependency scanning.

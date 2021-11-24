@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/zmq_remote_rx.dir/zmq_remote_rx.c.o"
-  "CMakeFiles/zmq_remote_rx.dir/zmq_remote_rx.c.o.d"
-  "zmq_remote_rx"
   "zmq_remote_rx.pdb"
+  "zmq_remote_rx"
 )
 
 # Per-language clean rules from dependency scanning.

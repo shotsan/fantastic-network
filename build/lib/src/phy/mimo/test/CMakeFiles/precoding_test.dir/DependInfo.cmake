@@ -1,14 +1,26 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "C"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_C
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/mimo/test/precoder_test.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/mimo/test/CMakeFiles/precoding_test.dir/precoder_test.c.o"
+  )
+set(CMAKE_C_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS_C
+  "ENABLE_TIMEPROF"
+  "HAVE_MBEDTLS"
   )
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/mimo/test/precoder_test.c" "lib/src/phy/mimo/test/CMakeFiles/precoding_test.dir/precoder_test.c.o" "gcc" "lib/src/phy/mimo/test/CMakeFiles/precoding_test.dir/precoder_test.c.o.d"
+# The include file search paths:
+set(CMAKE_C_TARGET_INCLUDE_PATH
+  "/usr/include/glib-2.0"
+  "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+  "/usr/local/include/hiredis"
+  "lib/include"
+  "../lib/include"
   )
 
 # Targets to which this target links.

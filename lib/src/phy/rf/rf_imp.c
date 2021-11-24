@@ -104,14 +104,17 @@ int srslte_rf_open_devname(srslte_rf_t* rf, const char* devname, char* args, uin
 {
   rf->thread_gain_run = false;
   /* Try to open the device if name is provided */
+  
   if (devname) {
     if (devname[0] != '\0') {
       int i = 0;
       while (available_devices[i] != NULL) {
+         printf("\n dev name %s",available_devices[i]->name);
         if (!strcasecmp(available_devices[i]->name, devname)) {
           rf->dev = available_devices[i];
           return available_devices[i]->srslte_rf_open_multi(args, &rf->handler, nof_channels);
         }
+       
         i++;
       }
       printf("Device %s not found. Switching to auto mode\n", devname);

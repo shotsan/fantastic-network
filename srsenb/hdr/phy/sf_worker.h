@@ -51,7 +51,7 @@ public:
   int  read_pusch_d(cf_t* pusch_d);
   int  read_pucch_d(cf_t* pusch_d);
   void start_plot();
-
+  uint16_t count=0;
   uint32_t get_metrics(phy_metrics_t metrics[ENB_METRICS_MAX_USERS]);
 
 private:

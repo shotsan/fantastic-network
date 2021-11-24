@@ -919,8 +919,8 @@ void cc_worker::set_uci_ack(srslte_uci_data_t* uci_data,
       if (cc_idx == 0) {
         tb_count_cc0 = tb_count;
         if(tb_count>0)
-        {ack_flag=true;}
-       // printf("\n tb %d",tb_count_cc0);}
+        {ack_flag=true;
+        printf("\n tb %d",tb_count_cc0);}
       }
     }
   }

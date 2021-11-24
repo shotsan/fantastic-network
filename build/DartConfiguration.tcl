@@ -20,13 +20,23 @@ BuildName: Linux-c++
 LabelsForSubprojects: 
 
 # Submission information
-SubmitURL: http://my.cdash.org/submit.php?project=srsLTE
+IsCDash: TRUE
+CDashVersion: 
+QueryCDashVersion: 
+DropSite: my.cdash.org
+DropLocation: /submit.php?project=srsLTE
+DropSiteUser: 
+DropSitePassword: 
+DropSiteMode: 
+DropMethod: http
+TriggerSite: 
+ScpCommand: /usr/bin/scp
 
 # Dashboard start time
 NightlyStartTime: 00:00:00 GMT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/snap/cmake/955/bin/cmake" "/home/grads/s/sant1/Desktop/srsLTE"
+ConfigureCommand: "/usr/bin/cmake" "/home/grads/s/sant1/Desktop/srsLTE"
 MakeCommand: /snap/cmake/955/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
 DefaultCTestConfigurationType: Release
 
@@ -35,11 +45,11 @@ UpdateVersionOnly:
 
 # CVS options
 # Default is "-d -P -A"
-CVSCommand: 
-CVSUpdateOptions: 
+CVSCommand: CVSCOMMAND-NOTFOUND
+CVSUpdateOptions: -d -A -P
 
 # Subversion options
-SVNCommand: 
+SVNCommand: SVNCOMMAND-NOTFOUND
 SVNOptions: 
 SVNUpdateOptions: 
 
@@ -50,7 +60,7 @@ GITUpdateOptions:
 GITUpdateCustom: 
 
 # Perforce options
-P4Command: 
+P4Command: P4COMMAND-NOTFOUND
 P4Client: 
 P4Options: 
 P4UpdateOptions: 
@@ -69,10 +79,6 @@ CompilerVersion: 7.5.0
 PurifyCommand: 
 ValgrindCommand: 
 ValgrindCommandOptions: --error-exitcode=1 --trace-children=yes --leak-check=full --show-reachable=yes --vex-guest-max-insns=25
-DrMemoryCommand: 
-DrMemoryCommandOptions: 
-CudaSanitizerCommand: 
-CudaSanitizerCommandOptions: 
 MemoryCheckType: 
 MemoryCheckSanitizerOptions: 
 MemoryCheckCommand: MEMORYCHECK_COMMAND-NOTFOUND
@@ -82,6 +88,10 @@ MemoryCheckSuppressionFile:
 # Coverage
 CoverageCommand: /usr/bin/gcov
 CoverageExtraFlags: -l
+
+# Cluster commands
+SlurmBatchCommand: SLURM_SBATCH_COMMAND-NOTFOUND
+SlurmRunCommand: SLURM_SRUN_COMMAND-NOTFOUND
 
 # Testing options
 # TimeOut is the amount of time in seconds to wait for processes

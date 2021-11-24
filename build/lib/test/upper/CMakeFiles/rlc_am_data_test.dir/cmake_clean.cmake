@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/rlc_am_data_test.dir/rlc_am_data_test.cc.o"
-  "CMakeFiles/rlc_am_data_test.dir/rlc_am_data_test.cc.o.d"
-  "rlc_am_data_test"
   "rlc_am_data_test.pdb"
+  "rlc_am_data_test"
 )
 
 # Per-language clean rules from dependency scanning.

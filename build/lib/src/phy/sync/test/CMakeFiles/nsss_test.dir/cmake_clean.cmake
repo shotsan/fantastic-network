@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/nsss_test.dir/nsss_test.c.o"
-  "CMakeFiles/nsss_test.dir/nsss_test.c.o.d"
-  "nsss_test"
   "nsss_test.pdb"
+  "nsss_test"
 )
 
 # Per-language clean rules from dependency scanning.

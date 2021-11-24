@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/rf_zmq_test.dir/rf_zmq_test.c.o"
-  "CMakeFiles/rf_zmq_test.dir/rf_zmq_test.c.o.d"
-  "rf_zmq_test"
   "rf_zmq_test.pdb"
+  "rf_zmq_test"
 )
 
 # Per-language clean rules from dependency scanning.

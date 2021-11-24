@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "libsrslte_phy.a"
   "libsrslte_phy.pdb"
+  "libsrslte_phy.a"
 )
 
 # Per-language clean rules from dependency scanning.

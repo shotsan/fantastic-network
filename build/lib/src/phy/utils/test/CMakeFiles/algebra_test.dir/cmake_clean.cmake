@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/algebra_test.dir/mat_test.c.o"
-  "CMakeFiles/algebra_test.dir/mat_test.c.o.d"
-  "algebra_test"
   "algebra_test.pdb"
+  "algebra_test"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/bcd_helpers_test.dir/bcd_helpers_test.cc.o"
-  "CMakeFiles/bcd_helpers_test.dir/bcd_helpers_test.cc.o.d"
-  "bcd_helpers_test"
   "bcd_helpers_test.pdb"
+  "bcd_helpers_test"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/soft_demod_test.dir/soft_demod_test.c.o"
-  "CMakeFiles/soft_demod_test.dir/soft_demod_test.c.o.d"
-  "soft_demod_test"
   "soft_demod_test.pdb"
+  "soft_demod_test"
 )
 
 # Per-language clean rules from dependency scanning.

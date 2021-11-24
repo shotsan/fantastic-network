@@ -1,14 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/srsenb_upper.dir/gtpu.cc.o"
-  "CMakeFiles/srsenb_upper.dir/gtpu.cc.o.d"
   "CMakeFiles/srsenb_upper.dir/pdcp.cc.o"
-  "CMakeFiles/srsenb_upper.dir/pdcp.cc.o.d"
   "CMakeFiles/srsenb_upper.dir/rlc.cc.o"
-  "CMakeFiles/srsenb_upper.dir/rlc.cc.o.d"
   "CMakeFiles/srsenb_upper.dir/s1ap.cc.o"
-  "CMakeFiles/srsenb_upper.dir/s1ap.cc.o.d"
-  "libsrsenb_upper.a"
   "libsrsenb_upper.pdb"
+  "libsrsenb_upper.a"
 )
 
 # Per-language clean rules from dependency scanning.

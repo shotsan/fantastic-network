@@ -134,7 +134,7 @@ void gtpu::write_pdu(uint16_t rnti, uint32_t lcid, srslte::unique_byte_buffer_t 
     gtpu_log->error("Error writing GTP-U Header. Flags 0x%x, Message Type 0x%x\n", header.flags, header.message_type);
     return;
   }
-   cout << " \n uplink: " << pdu->N_bytes;
+   //cout << " \n gtpu.cc l137 uplink: " << pdu->N_bytes;
    /*
    char * testing; 
    char data[SRSLTE_MAX_BUFFER_SIZE_BYTES];

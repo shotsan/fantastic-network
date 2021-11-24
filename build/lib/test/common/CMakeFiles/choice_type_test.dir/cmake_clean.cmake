@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/choice_type_test.dir/choice_type_test.cc.o"
-  "CMakeFiles/choice_type_test.dir/choice_type_test.cc.o.d"
-  "choice_type_test"
   "choice_type_test.pdb"
+  "choice_type_test"
 )
 
 # Per-language clean rules from dependency scanning.

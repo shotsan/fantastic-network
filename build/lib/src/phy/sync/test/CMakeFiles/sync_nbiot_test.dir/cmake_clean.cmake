@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/sync_nbiot_test.dir/sync_nbiot_test.c.o"
-  "CMakeFiles/sync_nbiot_test.dir/sync_nbiot_test.c.o.d"
-  "sync_nbiot_test"
   "sync_nbiot_test.pdb"
+  "sync_nbiot_test"
 )
 
 # Per-language clean rules from dependency scanning.

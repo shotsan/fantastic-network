@@ -1,23 +1,35 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/gtpu.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/gtpu.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/pdcp.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/pdcp.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/pdcp_entity_base.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/pdcp_entity_base.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/pdcp_entity_lte.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/pdcp_entity_lte.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/rlc.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_am_base.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_am_base.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_am_lte.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_am_lte.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_tm.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_tm.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_um_base.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_um_base.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_um_lte.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_um_lte.cc.o"
+  )
+set(CMAKE_CXX_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS_CXX
+  "ENABLE_TIMEPROF"
+  "HAVE_MBEDTLS"
   )
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/gtpu.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/gtpu.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/gtpu.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/pdcp.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/pdcp.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/pdcp.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/pdcp_entity_base.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/pdcp_entity_base.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/pdcp_entity_base.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/pdcp_entity_lte.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/pdcp_entity_lte.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/pdcp_entity_lte.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_am_base.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_am_base.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_am_base.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_am_lte.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_am_lte.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_am_lte.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_tm.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_tm.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_tm.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_um_base.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_um_base.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_um_base.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/upper/rlc_um_lte.cc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_um_lte.cc.o" "gcc" "lib/src/upper/CMakeFiles/srslte_upper.dir/rlc_um_lte.cc.o.d"
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/usr/include/glib-2.0"
+  "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+  "/usr/local/include/hiredis"
+  "lib/include"
+  "../lib/include"
   )
 
 # Targets to which this target links.

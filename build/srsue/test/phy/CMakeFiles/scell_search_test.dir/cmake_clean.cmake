@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/scell_search_test.dir/scell_search_test.cc.o"
-  "CMakeFiles/scell_search_test.dir/scell_search_test.cc.o.d"
-  "scell_search_test"
   "scell_search_test.pdb"
+  "scell_search_test"
 )
 
 # Per-language clean rules from dependency scanning.

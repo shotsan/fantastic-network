@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ringbuffer_test.dir/ring_buffer_test.c.o"
-  "CMakeFiles/ringbuffer_test.dir/ring_buffer_test.c.o.d"
-  "ringbuffer_test"
   "ringbuffer_test.pdb"
+  "ringbuffer_test"
 )
 
 # Per-language clean rules from dependency scanning.

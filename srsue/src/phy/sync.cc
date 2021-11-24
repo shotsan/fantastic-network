@@ -318,7 +318,7 @@ bool sync::cell_select(const phy_interface_rrc_lte::phy_cell_t* new_cell)
   /* SFN synchronization */
   phy_state.run_sfn_sync();
   if (phy_state.is_camping()) {
-    Info("Cell Select: SFN synchronized. CAMPING...\n");
+    printf("Cell Select: SFN synchronized. CAMPING...\n");
     stack->in_sync();
     ret = true;
   } else {
@@ -758,7 +758,7 @@ bool sync::set_frequency()
     }
   }
   if (set_dl_freq > 0 && set_ul_freq > 0) {
-    log_h->info("SYNC:  Set DL EARFCN=%d, f_dl=%.1f MHz, f_ul=%.1f MHz\n",
+    log_h->console("SYNC:  Set DL EARFCN=%d, f_dl=%.1f MHz, f_ul=%.1f MHz\n",
                 current_earfcn,
                 set_dl_freq / 1e6,
                 set_ul_freq / 1e6);
@@ -828,7 +828,7 @@ int sync::radio_recv_fnc(srslte::rf_buffer_t& data, uint32_t nsamples, srslte_ti
     // check timestamp reset
     if (forced_rx_time_init || srslte_timestamp_iszero(&tti_ts) || srslte_timestamp_compare(rx_time, &tti_ts) < 0) {
       if (srslte_timestamp_compare(rx_time, &tti_ts) < 0) {
-        log_h->warning("SYNC:  radio time seems to be going backwards (rx_time=%f, tti_ts=%f)\n",
+        log_h->console("SYNC:  radio time seems to be going backwards (rx_time=%f, tti_ts=%f)\n",
                        srslte_timestamp_real(rx_time),
                        srslte_timestamp_real(&tti_ts));
         // time-stamp will be set to rx time below and run_tti() will be called with MIN_TTI_JUMP
@@ -978,7 +978,7 @@ sync::search::ret_code sync::search::run(srslte_cell_t* cell_, std::array<uint8_
   float cfo           = found_cells[max_peak_cell].cfo;
 
   log_h->console("\n");
-  Info("SYNC:  PSS/SSS detected: Mode=%s, PCI=%d, CFO=%.1f KHz, CP=%s\n",
+  log_h->console("SYNC:  PSS/SSS detected: Mode=%s, PCI=%d, CFO=%.1f KHz, CP=%s\n",
        new_cell.frame_type ? "TDD" : "FDD",
        new_cell.id,
        cfo / 1000,
@@ -1012,7 +1012,7 @@ sync::search::ret_code sync::search::run(srslte_cell_t* cell_, std::array<uint8_
             new_cell.nof_ports,
             cfo / 1000);
 
-    Info("SYNC:  MIB Decoded: Mode=%s, PCI=%d, PRB=%d, Ports=%d, CFO=%.1f KHz\n",
+    fprintf(stdout,"SYNC:  MIB Decoded: Mode=%s, PCI=%d, PRB=%d, Ports=%d, CFO=%.1f KHz\n",
          new_cell.frame_type ? "TDD" : "FDD",
          new_cell.id,
          new_cell.nof_prb,

@@ -1,10 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/srslte_resampling.dir/decim.c.o"
-  "CMakeFiles/srslte_resampling.dir/decim.c.o.d"
   "CMakeFiles/srslte_resampling.dir/interp.c.o"
-  "CMakeFiles/srslte_resampling.dir/interp.c.o.d"
   "CMakeFiles/srslte_resampling.dir/resample_arb.c.o"
-  "CMakeFiles/srslte_resampling.dir/resample_arb.c.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

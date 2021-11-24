@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/asn1_utils.dir/asn1_utils.cc.o"
-  "CMakeFiles/asn1_utils.dir/asn1_utils.cc.o.d"
-  "libasn1_utils.a"
   "libasn1_utils.pdb"
+  "libasn1_utils.a"
 )
 
 # Per-language clean rules from dependency scanning.

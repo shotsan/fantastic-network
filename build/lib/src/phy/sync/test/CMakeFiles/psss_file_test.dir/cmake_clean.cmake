@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/psss_file_test.dir/psss_file_test.c.o"
-  "CMakeFiles/psss_file_test.dir/psss_file_test.c.o.d"
-  "psss_file_test"
   "psss_file_test.pdb"
+  "psss_file_test"
 )
 
 # Per-language clean rules from dependency scanning.

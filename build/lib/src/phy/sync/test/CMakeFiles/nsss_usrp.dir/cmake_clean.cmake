@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/nsss_usrp.dir/nsss_usrp.c.o"
-  "CMakeFiles/nsss_usrp.dir/nsss_usrp.c.o.d"
-  "nsss_usrp"
   "nsss_usrp.pdb"
+  "nsss_usrp"
 )
 
 # Per-language clean rules from dependency scanning.

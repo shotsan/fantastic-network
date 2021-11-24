@@ -1,8 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/srslte_mimo.dir/layermap.c.o"
-  "CMakeFiles/srslte_mimo.dir/layermap.c.o.d"
   "CMakeFiles/srslte_mimo.dir/precoding.c.o"
-  "CMakeFiles/srslte_mimo.dir/precoding.c.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

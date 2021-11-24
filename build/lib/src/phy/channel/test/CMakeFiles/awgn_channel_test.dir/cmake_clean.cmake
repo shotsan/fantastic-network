@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/awgn_channel_test.dir/awgn_channel_test.c.o"
-  "CMakeFiles/awgn_channel_test.dir/awgn_channel_test.c.o.d"
-  "awgn_channel_test"
   "awgn_channel_test.pdb"
+  "awgn_channel_test"
 )
 
 # Per-language clean rules from dependency scanning.

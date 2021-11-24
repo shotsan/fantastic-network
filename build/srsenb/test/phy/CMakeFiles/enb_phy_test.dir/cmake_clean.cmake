@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/enb_phy_test.dir/enb_phy_test.cc.o"
-  "CMakeFiles/enb_phy_test.dir/enb_phy_test.cc.o.d"
-  "enb_phy_test"
   "enb_phy_test.pdb"
+  "enb_phy_test"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,10 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/scheduler_ca_test.dir/scheduler_ca_test.cc.o"
-  "CMakeFiles/scheduler_ca_test.dir/scheduler_ca_test.cc.o.d"
   "CMakeFiles/scheduler_ca_test.dir/scheduler_test_common.cc.o"
-  "CMakeFiles/scheduler_ca_test.dir/scheduler_test_common.cc.o.d"
-  "scheduler_ca_test"
   "scheduler_ca_test.pdb"
+  "scheduler_ca_test"
 )
 
 # Per-language clean rules from dependency scanning.

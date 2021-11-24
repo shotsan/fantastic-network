@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/viterbi_test.dir/viterbi_test.c.o"
-  "CMakeFiles/viterbi_test.dir/viterbi_test.c.o.d"
-  "viterbi_test"
   "viterbi_test.pdb"
+  "viterbi_test"
 )
 
 # Per-language clean rules from dependency scanning.

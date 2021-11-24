@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/pdcp_lte_test_rx.dir/pdcp_lte_test_rx.cc.o"
-  "CMakeFiles/pdcp_lte_test_rx.dir/pdcp_lte_test_rx.cc.o.d"
-  "pdcp_lte_test_rx"
   "pdcp_lte_test_rx.pdb"
+  "pdcp_lte_test_rx"
 )
 
 # Per-language clean rules from dependency scanning.

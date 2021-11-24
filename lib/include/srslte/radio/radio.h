@@ -34,7 +34,7 @@
 #define SRSLTE_RADIO_H
 
 namespace srslte {
-
+  
 /**
  * Implemenation of the rf_buffer_interface for the current radio implementation which uses flat arrays.
  * @see rf_buffer_interface
@@ -347,7 +347,9 @@ private:
   void set_tx_adv(int nsamples);
   void set_tx_adv_neg(bool tx_adv_is_neg);
   bool config_rf_channels(const rf_args_t& args);
+  FILE *fp1=NULL;
 };
+ 
 
 } // namespace srslte
 

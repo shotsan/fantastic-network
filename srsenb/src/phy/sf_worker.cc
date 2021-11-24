@@ -173,6 +173,7 @@ void sf_worker::work_imp()
        perror("getcwd() error");
         
    }*/
+    
   strftime (buffer,64,"enb/data_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
   //strcat(cwd,buffer);
   //printf("Current working dir: %s\n", buffer);
@@ -264,13 +265,28 @@ void sf_worker::work_imp()
   // Save grants
   phy->set_ul_grants(t_tx_ul, ul_grants_tx);
   phy->set_ul_grants(t_rx, ul_grants);
+  
    if(dl_grants[0].pdsch->dci.rnti>0 && dl_grants[0].pdsch->dci.rnti<100){
+   }
      
-     flag=true;
-     //gettimeofday(&tf, NULL);
-    fprintf(fp," \n Sfworker.cc tti-dl %u tti-ul %u, rnti %u, time %f, nofg=%u",tti_tx_dl,tti_tx_ul,dl_grants[0].pdsch->dci.rnti,tx_time.full_secs+tx_time.frac_secs,dl_grants[0].nof_grants);
-  }
+
   Debug("Sending to radio\n");
+  
+  if(tx_time.full_secs>=19)
+  {
+  flag=true;
+      
+     //gettimeofday(&tf, NULL);
+    
+    fprintf(fp,"\n Sfworker.cc tti-dl %u tti-ul %u",tti_tx_dl,tti_tx_ul); 
+    fprintf(fp,"\n rnti %u, time %f",dl_grants[0].pdsch->dci.rnti,tx_time.full_secs+tx_time.frac_secs);
+    //printf("\n before %f",tx_time.frac_secs);
+  //tx_time.frac_secs=tx_time.frac_secs+.00001;
+   }
+     
+   if(flag==false && tx_time.full_secs+tx_time.frac_secs>18.9 )
+  fprintf(fp,"\n rnti %u, bs pre-attack time %f",dl_grants[0].pdsch->dci.rnti,tx_time.full_secs+tx_time.frac_secs);
+
   phy->worker_end(this, tx_buffer, SRSLTE_SF_LEN_PRB(phy->get_nof_prb(0)), tx_time,flag);  
 
 #ifdef DEBUG_WRITE_FILE

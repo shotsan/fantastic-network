@@ -1,18 +1,11 @@
 file(REMOVE_RECURSE
   "CMakeFiles/srslte_channel.dir/ch_awgn.c.o"
-  "CMakeFiles/srslte_channel.dir/ch_awgn.c.o.d"
-  "CMakeFiles/srslte_channel.dir/channel.cc.o"
-  "CMakeFiles/srslte_channel.dir/channel.cc.o.d"
   "CMakeFiles/srslte_channel.dir/delay.c.o"
-  "CMakeFiles/srslte_channel.dir/delay.c.o.d"
   "CMakeFiles/srslte_channel.dir/fading.c.o"
-  "CMakeFiles/srslte_channel.dir/fading.c.o.d"
   "CMakeFiles/srslte_channel.dir/gauss.c.o"
-  "CMakeFiles/srslte_channel.dir/gauss.c.o.d"
   "CMakeFiles/srslte_channel.dir/hst.c.o"
-  "CMakeFiles/srslte_channel.dir/hst.c.o.d"
   "CMakeFiles/srslte_channel.dir/rlf.c.o"
-  "CMakeFiles/srslte_channel.dir/rlf.c.o.d"
+  "CMakeFiles/srslte_channel.dir/channel.cc.o"
 )
 
 # Per-language clean rules from dependency scanning.

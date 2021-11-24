@@ -1,22 +1,34 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "C"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_C
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_common.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_common.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_dl.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_dl.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_dl_nbiot.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_dl_nbiot.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_sl.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_sl.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_ul.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_ul.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/refsignal_dl.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/refsignal_dl.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/refsignal_dl_nbiot.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/refsignal_dl_nbiot.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/refsignal_ul.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/refsignal_ul.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/wiener_dl.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/wiener_dl.c.o"
+  )
+set(CMAKE_C_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS_C
+  "ENABLE_TIMEPROF"
+  "HAVE_MBEDTLS"
   )
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_common.c" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_common.c.o" "gcc" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_common.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_dl.c" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_dl.c.o" "gcc" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_dl.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_dl_nbiot.c" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_dl_nbiot.c.o" "gcc" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_dl_nbiot.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_sl.c" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_sl.c.o" "gcc" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_sl.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/chest_ul.c" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_ul.c.o" "gcc" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/chest_ul.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/refsignal_dl.c" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/refsignal_dl.c.o" "gcc" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/refsignal_dl.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/refsignal_dl_nbiot.c" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/refsignal_dl_nbiot.c.o" "gcc" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/refsignal_dl_nbiot.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/refsignal_ul.c" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/refsignal_ul.c.o" "gcc" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/refsignal_ul.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ch_estimation/wiener_dl.c" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/wiener_dl.c.o" "gcc" "lib/src/phy/ch_estimation/CMakeFiles/srslte_ch_estimation.dir/wiener_dl.c.o.d"
+# The include file search paths:
+set(CMAKE_C_TARGET_INCLUDE_PATH
+  "/usr/include/glib-2.0"
+  "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+  "/usr/local/include/hiredis"
+  "lib/include"
+  "../lib/include"
   )
 
 # Targets to which this target links.

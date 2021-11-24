@@ -268,13 +268,13 @@ private:
     {
       std::unique_lock<std::mutex> lock(mutex);
       tx_freq = (float)freq;
-      log_h.info("Set Tx freq to %+.0f MHz.\n", freq * 1.0e-6);
+      log_h.console("Set Tx freq to %+.0f MHz.\n", freq * 1.0e-6);
     }
     void set_rx_freq(const uint32_t& channel_idx, const double& freq) override
     {
       std::unique_lock<std::mutex> lock(mutex);
       rx_freq = (float)freq;
-      log_h.info("Set Rx freq to %+.0f MHz.\n", freq * 1.0e-6);
+      log_h.console("Set Rx freq to %+.0f MHz.\n", freq * 1.0e-6);
     }
     void set_rx_gain_th(const float& gain) override
     {

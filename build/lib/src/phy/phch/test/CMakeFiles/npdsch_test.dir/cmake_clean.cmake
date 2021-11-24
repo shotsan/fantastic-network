@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/npdsch_test.dir/npdsch_test.c.o"
-  "CMakeFiles/npdsch_test.dir/npdsch_test.c.o.d"
-  "npdsch_test"
   "npdsch_test.pdb"
+  "npdsch_test"
 )
 
 # Per-language clean rules from dependency scanning.

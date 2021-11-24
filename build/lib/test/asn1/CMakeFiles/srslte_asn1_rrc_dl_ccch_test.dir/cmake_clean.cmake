@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/srslte_asn1_rrc_dl_ccch_test.dir/srslte_asn1_rrc_dl_ccch_test.cc.o"
-  "CMakeFiles/srslte_asn1_rrc_dl_ccch_test.dir/srslte_asn1_rrc_dl_ccch_test.cc.o.d"
-  "srslte_asn1_rrc_dl_ccch_test"
   "srslte_asn1_rrc_dl_ccch_test.pdb"
+  "srslte_asn1_rrc_dl_ccch_test"
 )
 
 # Per-language clean rules from dependency scanning.

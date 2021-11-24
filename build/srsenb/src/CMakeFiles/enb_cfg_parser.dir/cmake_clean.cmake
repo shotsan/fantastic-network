@@ -1,10 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/enb_cfg_parser.dir/enb_cfg_parser.cc.o"
-  "CMakeFiles/enb_cfg_parser.dir/enb_cfg_parser.cc.o.d"
   "CMakeFiles/enb_cfg_parser.dir/parser.cc.o"
-  "CMakeFiles/enb_cfg_parser.dir/parser.cc.o.d"
-  "libenb_cfg_parser.a"
+  "CMakeFiles/enb_cfg_parser.dir/enb_cfg_parser.cc.o"
   "libenb_cfg_parser.pdb"
+  "libenb_cfg_parser.a"
 )
 
 # Per-language clean rules from dependency scanning.

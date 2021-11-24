@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/prach_test_usrp.dir/prach_test_usrp.c.o"
-  "CMakeFiles/prach_test_usrp.dir/prach_test_usrp.c.o.d"
-  "prach_test_usrp"
   "prach_test_usrp.pdb"
+  "prach_test_usrp"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/srsepc.dir/main.cc.o"
-  "CMakeFiles/srsepc.dir/main.cc.o.d"
-  "srsepc"
   "srsepc.pdb"
+  "srsepc"
 )
 
 # Per-language clean rules from dependency scanning.

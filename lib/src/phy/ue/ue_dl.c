@@ -1112,7 +1112,7 @@ static void gen_ack_fdd(const srslte_pdsch_ack_t* ack_info, srslte_uci_data_t* u
   }
   // tbs_=nof_tb;
   //*noftbs=nof_tb;
-  printf("\n ue_dl.c l:1111 no of tbs %d",nof_tb);
+  //printf("\n ue_dl.c l:1111 no of tbs %d",nof_tb);
   // For each HARQ ACK/NACK feedback mode
   switch (ack_info->ack_nack_feedback_mode) {
 

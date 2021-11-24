@@ -1,14 +1,27 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/grads/s/sant1/Desktop/srsLTE/srsenb/test/mac/scheduler_test_rand.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/srsenb/test/mac/CMakeFiles/scheduler_test_rand.dir/scheduler_test_rand.cc.o"
+  )
+set(CMAKE_CXX_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS_CXX
+  "ENABLE_TIMEPROF"
+  "HAVE_MBEDTLS"
   )
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/grads/s/sant1/Desktop/srsLTE/srsenb/test/mac/scheduler_test_rand.cc" "srsenb/test/mac/CMakeFiles/scheduler_test_rand.dir/scheduler_test_rand.cc.o" "gcc" "srsenb/test/mac/CMakeFiles/scheduler_test_rand.dir/scheduler_test_rand.cc.o.d"
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/usr/include/glib-2.0"
+  "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+  "/usr/local/include/hiredis"
+  "lib/include"
+  "../lib/include"
+  "../"
   )
 
 # Targets to which this target links.

@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include "hiredis.h"
 #include "srslte/common/config_file.h"
 #include "srslte/common/crash_handler.h"
 #include "srslte/common/signal_handler.h"
@@ -42,7 +42,9 @@
 using namespace std;
 using namespace srsenb;
 namespace bpo = boost::program_options;
-
+  #ifdef _MSC_VER
+#include <winsock2.h> /* For struct timeval */
+#endif
 /**********************************************************************
  *  Program arguments processing
  ***********************************************************************/
@@ -402,6 +404,62 @@ int main(int argc, char* argv[])
   all_args_t                         args = {};
   srslte::metrics_hub<enb_metrics_t> metricshub;
   metrics_stdout                     metrics_screen;
+   
+
+
+ 
+    unsigned int j, isunix = 0;
+    redisContext *c;
+    redisReply *reply;
+    const char *hostname =  "127.0.0.1";
+
+    
+
+    int port =  6379;
+
+    struct timeval timeout = { 1, 500000 }; // 1.5 seconds
+    if (isunix) {
+        c = (struct redisContext*) redisConnectUnixWithTimeout(hostname, timeout);
+    } else {
+        c = (struct redisContext*)  redisConnectWithTimeout(hostname, port, timeout);
+    }
+    if (c == NULL || c->err) {
+        if (c) {
+            printf("Connection error: %s\n", c->errstr);
+            redisFree(c);
+        } else {
+            printf("Connection error: can't allocate redis context\n");
+        }
+        exit(1);
+    }
+
+    /* PING server */
+    reply = (struct redisReply*)  redisCommand(c,"PING");
+    printf("PING: %s\n", reply->str);
+    freeReplyObject(reply);
+
+    /* Set a key */
+    reply = (struct redisReply*)  redisCommand(c,"SET %s %s", "foo", "hello world");
+    printf("SET: %s\n", reply->str);
+    freeReplyObject(reply);
+
+    reply = (struct redisReply*) redisCommand(c,"GET foo");
+    printf("GET foo: %s\n", reply->str);
+    freeReplyObject(reply);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   cout << "---  Software Radio Systems LTE eNodeB  ---" << endl << endl;
 

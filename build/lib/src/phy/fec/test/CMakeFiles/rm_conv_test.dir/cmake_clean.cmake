@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/rm_conv_test.dir/rm_conv_test.c.o"
-  "CMakeFiles/rm_conv_test.dir/rm_conv_test.c.o.d"
-  "rm_conv_test"
   "rm_conv_test.pdb"
+  "rm_conv_test"
 )
 
 # Per-language clean rules from dependency scanning.

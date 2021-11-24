@@ -222,7 +222,7 @@ void sf_worker::work_imp()
        perror("getcwd() error");
         
    }*/
-  strftime (buffer,64,"ue/data_%b_%d_%H_%M_%S.txt",timeinfo);//generate string SA_TEST_DATE_TIME
+  strftime (buffer,64,"ue/data_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
   //strcat(cwd,buffer);
   //printf("Current working dir: %s\n", buffer);
   fp=fopen(buffer, "a");
@@ -374,12 +374,12 @@ void sf_worker::update_measurements()
 
   // Check in-sync / out-sync conditions
   if (phy->avg_rsrp_dbm[0] > phy->args->in_sync_rsrp_dbm_th && phy->avg_snr_db_cqi[0] > phy->args->in_sync_snr_db_th) {
-    log_h->debug("SNR=%.1f dB, RSRP=%.1f dBm sync=in-sync from channel estimator\n",
+    log_h->console("SNR=%.1f dB, RSRP=%.1f dBm sync=in-sync from channel estimator\n",
                  phy->avg_snr_db_cqi[0],
                  phy->avg_rsrp_dbm[0]);
     chest_loop->in_sync();
   } else {
-    log_h->warning("SNR=%.1f dB RSRP=%.1f dBm, sync=out-of-sync from channel estimator\n",
+    log_h->console("SNR=%.1f dB RSRP=%.1f dBm, sync=out-of-sync from channel estimator\n",
                    phy->avg_snr_db_cqi[0],
                    phy->avg_rsrp_dbm[0]);
     chest_loop->out_of_sync();

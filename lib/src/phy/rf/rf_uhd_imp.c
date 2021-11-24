@@ -1150,7 +1150,7 @@ int rf_uhd_send_timed_multi(void*  h,
     for (int i = 0; i < SRSLTE_MAX_CHANNELS; i++) {
       buffs_ptr[i] = data[i];
     }
-    uhd_tx_metadata_set_has_time_spec(&handler->tx_md, is_start_of_burst);
+    uhd_tx_metadata_set_has_time_spec(&handler->tx_md, has_time_spec );
     uhd_tx_metadata_set_start(&handler->tx_md, is_start_of_burst);
     uhd_tx_metadata_set_end(&handler->tx_md, is_end_of_burst);
     uhd_error error = uhd_tx_streamer_send(handler->tx_stream, buffs_ptr, nsamples, &handler->tx_md, 0.0, &txd_samples);

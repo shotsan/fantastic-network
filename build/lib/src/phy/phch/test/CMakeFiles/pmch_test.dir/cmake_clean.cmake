@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/pmch_test.dir/pmch_test.c.o"
-  "CMakeFiles/pmch_test.dir/pmch_test.c.o.d"
-  "pmch_test"
   "pmch_test.pdb"
+  "pmch_test"
 )
 
 # Per-language clean rules from dependency scanning.

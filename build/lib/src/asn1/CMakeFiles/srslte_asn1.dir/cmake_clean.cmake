@@ -1,14 +1,10 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/srslte_asn1.dir/gtpc.cc.o"
-  "CMakeFiles/srslte_asn1.dir/gtpc.cc.o.d"
   "CMakeFiles/srslte_asn1.dir/liblte_common.cc.o"
-  "CMakeFiles/srslte_asn1.dir/liblte_common.cc.o.d"
-  "CMakeFiles/srslte_asn1.dir/liblte_m2ap.cc.o"
-  "CMakeFiles/srslte_asn1.dir/liblte_m2ap.cc.o.d"
   "CMakeFiles/srslte_asn1.dir/liblte_mme.cc.o"
-  "CMakeFiles/srslte_asn1.dir/liblte_mme.cc.o.d"
-  "libsrslte_asn1.a"
+  "CMakeFiles/srslte_asn1.dir/liblte_m2ap.cc.o"
+  "CMakeFiles/srslte_asn1.dir/gtpc.cc.o"
   "libsrslte_asn1.pdb"
+  "libsrslte_asn1.a"
 )
 
 # Per-language clean rules from dependency scanning.

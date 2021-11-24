@@ -41,7 +41,30 @@ include(SRSLTEVersion) #sets version information
 include(SRSLTEPackage) #setup cpack
 
 include(CTest)
+INCLUDE(FindPkgConfig)
+PKG_CHECK_MODULES(GLIB2 glib-2.0)
+if (GLIB2_FOUND)
+    INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIRS})
+    LINK_DIRECTORIES(${GLIB2_LIBRARY_DIRS})
+    #ADD_EXECUTABLE(example-glib example-glib.c)
+    message(STATUS "GLIB_LIBRARIES: " ${GLIB2_LIBRARY_DIRS})
+    #TARGET_LINK_LIBRARIES(${GLIB2_LIBRARIES})
+ENDIF(GLIB2_FOUND)
+PKG_CHECK_MODULES(HIREDIS hiredis)
+if (HIREDIS_FOUND)
+    INCLUDE_DIRECTORIES(${HIREDIS_INCLUDE_DIRS})
+    LINK_DIRECTORIES(${HIREDIS_LIBRARY_DIRS})
+    message(STATUS "HIREDIS: " ${HIREDIS_INCLUDE_DIRS})
+     set(HIREDIS_LIBRARIES    "${HIREDIS_LIBRARIES}")
+    #ADD_EXECUTABLE(example-glib example-glib.c)
+   
+ENDIF(HIREDIS_FOUND)
 
+#ADD_EXECUTABLE(example example.c)
+#TARGET_LINK_LIBRARIES(hiredis)
+
+#ADD_EXECUTABLE(example-push example-push.c)
+#TARGET_LINK_LIBRARIES(hiredis)
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/CTestCustom.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.cmake"

@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/delay_channel_test.dir/delay_channel_test.c.o"
-  "CMakeFiles/delay_channel_test.dir/delay_channel_test.c.o.d"
-  "delay_channel_test"
   "delay_channel_test.pdb"
+  "delay_channel_test"
 )
 
 # Per-language clean rules from dependency scanning.

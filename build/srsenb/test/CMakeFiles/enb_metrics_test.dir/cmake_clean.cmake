@@ -1,12 +1,9 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/enb_metrics_test.dir/__/src/metrics_csv.cc.o"
-  "CMakeFiles/enb_metrics_test.dir/__/src/metrics_csv.cc.o.d"
-  "CMakeFiles/enb_metrics_test.dir/__/src/metrics_stdout.cc.o"
-  "CMakeFiles/enb_metrics_test.dir/__/src/metrics_stdout.cc.o.d"
   "CMakeFiles/enb_metrics_test.dir/enb_metrics_test.cc.o"
-  "CMakeFiles/enb_metrics_test.dir/enb_metrics_test.cc.o.d"
-  "enb_metrics_test"
+  "CMakeFiles/enb_metrics_test.dir/__/src/metrics_stdout.cc.o"
+  "CMakeFiles/enb_metrics_test.dir/__/src/metrics_csv.cc.o"
   "enb_metrics_test.pdb"
+  "enb_metrics_test"
 )
 
 # Per-language clean rules from dependency scanning.

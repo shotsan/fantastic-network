@@ -34,6 +34,7 @@ endif()
 ########################################################################
 include_directories(
     ${Boost_INCLUDE_DIRS}
+${HIREDIS_INCLUDE_DIRS}
     ${SEC_INCLUDE_DIRS}
     ${PROJECT_SOURCE_DIR}
 )
@@ -41,6 +42,7 @@ include_directories(
 link_directories(
     ${Boost_LIBRARY_DIRS}
     ${SEC_LIBRARY_DIRS}
+    ${HIREDIS_LIBRARY_DIRS}
 )
 
 ########################################################################

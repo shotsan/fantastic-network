@@ -1,17 +1,30 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/grads/s/sant1/Desktop/srsLTE/srsue/src/main.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/srsue/src/CMakeFiles/srsue_MIM.dir/main.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/srsue/src/metrics_csv.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/srsue/src/CMakeFiles/srsue_MIM.dir/metrics_csv.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/srsue/src/metrics_stdout.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/srsue/src/CMakeFiles/srsue_MIM.dir/metrics_stdout.cc.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/srsue/src/ue.cc" "/home/grads/s/sant1/Desktop/srsLTE/build/srsue/src/CMakeFiles/srsue_MIM.dir/ue.cc.o"
+  )
+set(CMAKE_CXX_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS_CXX
+  "ENABLE_TIMEPROF"
+  "HAVE_MBEDTLS"
   )
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/grads/s/sant1/Desktop/srsLTE/srsue/src/main.cc" "srsue/src/CMakeFiles/srsue_MIM.dir/main.cc.o" "gcc" "srsue/src/CMakeFiles/srsue_MIM.dir/main.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/srsue/src/metrics_csv.cc" "srsue/src/CMakeFiles/srsue_MIM.dir/metrics_csv.cc.o" "gcc" "srsue/src/CMakeFiles/srsue_MIM.dir/metrics_csv.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/srsue/src/metrics_stdout.cc" "srsue/src/CMakeFiles/srsue_MIM.dir/metrics_stdout.cc.o" "gcc" "srsue/src/CMakeFiles/srsue_MIM.dir/metrics_stdout.cc.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/srsue/src/ue.cc" "srsue/src/CMakeFiles/srsue_MIM.dir/ue.cc.o" "gcc" "srsue/src/CMakeFiles/srsue_MIM.dir/ue.cc.o.d"
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/usr/include/glib-2.0"
+  "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+  "/usr/local/include/hiredis"
+  "lib/include"
+  "../lib/include"
+  "../"
   )
 
 # Targets to which this target links.

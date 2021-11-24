@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ue_mib_sync_test_nbiot_usrp.dir/ue_mib_sync_test_nbiot_usrp.c.o"
-  "CMakeFiles/ue_mib_sync_test_nbiot_usrp.dir/ue_mib_sync_test_nbiot_usrp.c.o.d"
-  "ue_mib_sync_test_nbiot_usrp"
   "ue_mib_sync_test_nbiot_usrp.pdb"
+  "ue_mib_sync_test_nbiot_usrp"
 )
 
 # Per-language clean rules from dependency scanning.

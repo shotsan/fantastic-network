@@ -1,23 +1,35 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "C"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_C
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_cell_search.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_cell_search.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_cell_search_nbiot.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_cell_search_nbiot.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_dl.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_dl.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_dl_nbiot.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_dl_nbiot.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_mib.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_mib.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_mib_nbiot.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_mib_nbiot.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_mib_sl.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_mib_sl.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_sync.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_sync.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_sync_nbiot.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_sync_nbiot.c.o"
+  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_ul.c" "/home/grads/s/sant1/Desktop/srsLTE/build/lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_ul.c.o"
+  )
+set(CMAKE_C_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS_C
+  "ENABLE_TIMEPROF"
+  "HAVE_MBEDTLS"
   )
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_cell_search.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_cell_search.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_cell_search.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_cell_search_nbiot.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_cell_search_nbiot.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_cell_search_nbiot.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_dl.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_dl.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_dl.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_dl_nbiot.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_dl_nbiot.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_dl_nbiot.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_mib.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_mib.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_mib.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_mib_nbiot.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_mib_nbiot.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_mib_nbiot.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_mib_sl.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_mib_sl.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_mib_sl.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_sync.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_sync.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_sync.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_sync_nbiot.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_sync_nbiot.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_sync_nbiot.c.o.d"
-  "/home/grads/s/sant1/Desktop/srsLTE/lib/src/phy/ue/ue_ul.c" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_ul.c.o" "gcc" "lib/src/phy/ue/CMakeFiles/srslte_ue.dir/ue_ul.c.o.d"
+# The include file search paths:
+set(CMAKE_C_TARGET_INCLUDE_PATH
+  "/usr/include/glib-2.0"
+  "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+  "/usr/local/include/hiredis"
+  "lib/include"
+  "../lib/include"
   )
 
 # Targets to which this target links.

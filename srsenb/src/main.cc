@@ -407,7 +407,9 @@ int main(int argc, char* argv[])
    
 
 
- 
+ // COMMENTING REDIS CODE
+   
+   /*
     unsigned int j, isunix = 0;
     redisContext *c;
     redisReply *reply;
@@ -434,34 +436,21 @@ int main(int argc, char* argv[])
     }
 
     /* PING server */
-    reply = (struct redisReply*)  redisCommand(c,"PING");
+  /*  reply = (struct redisReply*)  redisCommand(c,"PING");
     printf("PING: %s\n", reply->str);
     freeReplyObject(reply);
 
     /* Set a key */
-    reply = (struct redisReply*)  redisCommand(c,"SET %s %s", "foo", "hello world");
+  /*  reply = (struct redisReply*)  redisCommand(c,"SET %s %s", "foo", "hello world");
     printf("SET: %s\n", reply->str);
     freeReplyObject(reply);
 
     reply = (struct redisReply*) redisCommand(c,"GET foo");
     printf("GET foo: %s\n", reply->str);
-    freeReplyObject(reply);
+    freeReplyObject(reply);*/
 
+ cout << "---  Software Radio Systems LTE eNodeB  ---" << endl << endl;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  cout << "---  Software Radio Systems LTE eNodeB  ---" << endl << endl;
 
   srslte_debug_handle_crash(argc, argv);
   parse_args(&args, argc, argv);

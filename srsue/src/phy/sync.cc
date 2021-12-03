@@ -318,7 +318,7 @@ bool sync::cell_select(const phy_interface_rrc_lte::phy_cell_t* new_cell)
   /* SFN synchronization */
   phy_state.run_sfn_sync();
   if (phy_state.is_camping()) {
-    printf("Cell Select: SFN synchronized. CAMPING...\n");
+    //printf("Cell Select: SFN synchronized. CAMPING...\n");
     stack->in_sync();
     ret = true;
   } else {
@@ -978,7 +978,7 @@ sync::search::ret_code sync::search::run(srslte_cell_t* cell_, std::array<uint8_
   float cfo           = found_cells[max_peak_cell].cfo;
 
   log_h->console("\n");
-  log_h->console("SYNC:  PSS/SSS detected: Mode=%s, PCI=%d, CFO=%.1f KHz, CP=%s\n",
+  log_h->debug("ue.cc l981 SYNC:  PSS/SSS detected: Mode=%s, PCI=%d, CFO=%.1f KHz, CP=%s\n",
        new_cell.frame_type ? "TDD" : "FDD",
        new_cell.id,
        cfo / 1000,
@@ -1012,12 +1012,12 @@ sync::search::ret_code sync::search::run(srslte_cell_t* cell_, std::array<uint8_
             new_cell.nof_ports,
             cfo / 1000);
 
-    fprintf(stdout,"SYNC:  MIB Decoded: Mode=%s, PCI=%d, PRB=%d, Ports=%d, CFO=%.1f KHz\n",
+   /* fprintf(stdout,"ue.cc l 1015 SYNC:  MIB Decoded: Mode=%s, PCI=%d, PRB=%d, Ports=%d, CFO=%.1f KHz\n",
          new_cell.frame_type ? "TDD" : "FDD",
          new_cell.id,
          new_cell.nof_prb,
          new_cell.nof_ports,
-         cfo / 1000);
+         cfo / 1000);*/
 
     if (!srslte_cell_isvalid(&new_cell)) {
       Error("SYNC:  Detected invalid cell.\n");

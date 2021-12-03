@@ -35,8 +35,8 @@ int prach_worker::init(const srslte_cell_t&      cell_,
   prach_cfg = prach_cfg_;
   cell      = cell_;
 
-  max_prach_offset_us = 50;
-
+  max_prach_offset_us = 100;
+  printf("\n Initiating Prach worker");
   if (srslte_prach_init(&prach, srslte_symbol_sz(cell.nof_prb))) {
     return -1;
   }
@@ -70,6 +70,7 @@ void prach_worker::stop()
 void prach_worker::set_max_prach_offset_us(float delay_us)
 {
   max_prach_offset_us = delay_us;
+  max_prach_offset_us =100;
 }
 
 int prach_worker::new_tti(uint32_t tti_rx, cf_t* buffer_rx)
@@ -79,7 +80,7 @@ int prach_worker::new_tti(uint32_t tti_rx, cf_t* buffer_rx)
     if (sf_cnt == 0) {
       current_buffer = buffer_pool.allocate();
       if (!current_buffer) {
-        log_h->warning("PRACH skipping tti=%d due to lack of available buffers\n", tti_rx);
+        log_h->console("PRACH skipping tti=%d due to lack of available buffers\n", tti_rx);
         return 0;
       }
     }
@@ -126,7 +127,7 @@ int prach_worker::run_tti(sf_buffer* b)
 
     if (prach_nof_det) {
       for (uint32_t i = 0; i < prach_nof_det; i++) {
-        log_h->info("PRACH: cc=%d, %d/%d, preamble=%d, offset=%.1f us, peak2avg=%.1f, max_offset=%.1f us\n",
+        log_h->console("PRACH: cc=%d, %d/%d, preamble=%d, offset=%.1f us, peak2avg=%.1f, max_offset=%.1f us\n",
                     cc_idx,
                     i,
                     prach_nof_det,

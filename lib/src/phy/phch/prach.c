@@ -33,7 +33,7 @@
 float save_corr[4096];
 
 // PRACH detection threshold is PRACH_DETECT_FACTOR*average
-#define PRACH_DETECT_FACTOR 18
+#define PRACH_DETECT_FACTOR 5
 
 #define N_SEQS 64         // Number of prach sequences available
 #define N_RB_SC 12        // Number of subcarriers per resource block

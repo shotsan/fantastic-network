@@ -170,7 +170,7 @@ bool prach::prepare_to_send(uint32_t preamble_idx_, int allowed_subframe_, float
     target_power_dbm = target_power_dbm_;
     allowed_subframe = allowed_subframe_;
     transmitted_tti  = -1;
-    Debug("PRACH: prepare to send preamble %d\n", preamble_idx);
+    log_h->debug("PRACH: prach.cc l173 prepare to send preamble %d tx_pwr %f\n", preamble_idx,target_power_dbm);
     return true;
   } else {
     if (!cell_initiated) {
@@ -193,7 +193,7 @@ bool prach::is_ready_to_send(uint32_t current_tti_)
     // consider the number of subframes the transmission must be anticipated
     uint32_t tti_tx = TTI_TX(current_tti_);
     if (srslte_prach_tti_opportunity(&prach_obj, tti_tx, allowed_subframe)) {
-      Debug("PRACH Buffer: Ready to send at tti: %d (now is %d)\n", tti_tx, current_tti_);
+      log_h->debug("PRACH Buffer: prach.cc l196 Ready to send at tti: %d (now is %d)\n", tti_tx, current_tti_);
       transmitted_tti = tti_tx;
       return true;
     }
@@ -250,7 +250,7 @@ cf_t* prach::generate(float cfo, uint32_t* nof_sf, float* target_power)
       *target_power = target_power_dbm;
     }
 
-    Info("PRACH: Transmitted preamble=%d, tti_tx=%d, CFO=%.2f KHz, nof_sf=%d, target_power=%.1f dBm\n",
+    log_h->debug("PRACH: l253 Transmitted preamble=%d, tti_tx=%d, CFO=%.2f KHz, nof_sf=%d, target_power=%.1f dBm\n",
          preamble_idx,
          transmitted_tti,
          cfo * 15,

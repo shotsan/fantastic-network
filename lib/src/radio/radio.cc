@@ -266,7 +266,7 @@ bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const 
 {
   uint32_t nof_samples   = nof_samples_;
   uint32_t sample_offset = 0;
-    double ta =0;
+  /*  double ta =0;
    if(fp1==NULL){
   time_t rawtime;
   struct tm * timeinfo;
@@ -282,11 +282,11 @@ bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const 
         
    }*/
     
-  strftime (buffer,64,"enb/radiotime_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
+  /*strftime (buffer,64,"enb/radiotime_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
   fp1=fopen(buffer, "a");
   if (!fp1)
     perror("fopen");
-  }
+  }*/
   // Return instantly if the radio module is not initialised
   if (!is_initialized) {
     return false;
@@ -302,19 +302,19 @@ bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const 
   
 
   // Save possible end of burst time
-  if(flag==false && tx_time.full_secs+tx_time.frac_secs>18.9)
-    fprintf(fp1,"\n Radio.cc l 362, original base station tx tti time %f, samples %d",tx_time.full_secs+tx_time.frac_secs,nof_samples);
-  if (flag==true)
-  { 
+//  if(flag==false && tx_time.full_secs+tx_time.frac_secs>18.9)
+//    fprintf(fp1,"\n Radio.cc l 362, original base station tx tti time %f, samples %d",tx_time.full_secs+tx_time.frac_secs,nof_samples);
+//  if (flag==true)
+//  { 
     //srslte_timestamp_t tf;
     //tf.frac_secs=0;
     //tf.full_secs=0;
-    tx_time.frac_secs=tx_time.frac_secs+ta;
-    end_of_burst_time.frac_secs=end_of_burst_time.frac_secs+ta;
-    fprintf(fp1,"\n Radio.cc l 362, after delayingtx tti time %f, samples %d",tx_time.full_secs+tx_time.frac_secs,sample_offset);
+//    tx_time.frac_secs=tx_time.frac_secs+ta;
+//    end_of_burst_time.frac_secs=end_of_burst_time.frac_secs+ta;
+ ////   fprintf(fp1,"\n Radio.cc l 362, after delayingtx tti time %f, samples %d",tx_time.full_secs+tx_time.frac_secs,sample_offset);
     //srslte_rf_get_time(&rf_device,&tf.full_secs,&tf.frac_secs);
    // log_h->console("time tti %ld.%f", tx.full_secs,tx.frac_secs );
-  }
+//  }
   // Calculate transmission overlap/gap if it is not start of the burst
   if (not is_start_of_burst) {
     // Calculates transmission time overlap with previous transmission
@@ -368,7 +368,7 @@ bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const 
   
   srslte_timestamp_copy(&end_of_burst_time, &tx_time);
   srslte_timestamp_add(&end_of_burst_time, 0, (double)nof_samples / cur_tx_srate);
-  if (flag==true)
+ /* if (flag==true)
   { 
     //srslte_timestamp_t tf;
     //tf.frac_secs=0;
@@ -378,7 +378,7 @@ bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const 
     fprintf(fp1,"\n Radio.cc l 362, actual air tx tti time %f, samples %d",tx_time.full_secs+tx_time.frac_secs,sample_offset);
     //srslte_rf_get_time(&rf_device,&tf.full_secs,&tf.frac_secs);
    // log_h->console("time tti %ld.%f", tx.full_secs,tx.frac_secs );
-  }
+  }*/
   void* radio_buffers[SRSLTE_MAX_CHANNELS] = {};
   if (!map_channels(rx_channel_mapping, sample_offset, buffer, radio_buffers)) {
     log_h->error("Mapping logical channels to physical channels for transmission\n");

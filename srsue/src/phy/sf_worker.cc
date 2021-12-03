@@ -209,12 +209,12 @@ void sf_worker::work_imp()
   uint32_t nof_samples     = SRSLTE_SF_LEN_PRB(cell.nof_prb);
   
   
- if(fp==NULL){
-  time_t rawtime;
-  struct tm * timeinfo;
-  char buffer [64];
-  time (&rawtime);
-  timeinfo = localtime (&rawtime);
+ //if(fp==NULL){
+//  time_t rawtime;
+ // struct tm * timeinfo;
+//  char buffer [64];
+//  time (&rawtime);
+//    timeinfo = localtime (&rawtime);
   /*char cwd[150];
    if (getcwd(cwd, sizeof(cwd)) != NULL) {
        printf("Current working dir: %s\n", cwd);
@@ -222,13 +222,13 @@ void sf_worker::work_imp()
        perror("getcwd() error");
         
    }*/
-  strftime (buffer,64,"ue/data_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
+  /*strftime (buffer,64,"ue/data_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
   //strcat(cwd,buffer);
   //printf("Current working dir: %s\n", buffer);
   fp=fopen(buffer, "a");
   if (!fp)
     perror("fopen");
-  }
+  }*/
   {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -280,11 +280,11 @@ void sf_worker::work_imp()
     }
   }
 
-    if(flag)
+   /* if(flag)
     {
     fprintf(fp,"\n sfworker.cc l261 tx_time %f, tti %d, rnti %d",tx_time.frac_secs+tx_time.full_secs,tti,rnti);
     flag=false;
-    }
+    }*/
   // Set PRACH buffer signal pointer
   if (prach_ptr) {
     tx_signal_ready = true;
@@ -374,12 +374,12 @@ void sf_worker::update_measurements()
 
   // Check in-sync / out-sync conditions
   if (phy->avg_rsrp_dbm[0] > phy->args->in_sync_rsrp_dbm_th && phy->avg_snr_db_cqi[0] > phy->args->in_sync_snr_db_th) {
-    log_h->console("SNR=%.1f dB, RSRP=%.1f dBm sync=in-sync from channel estimator\n",
+    log_h->debug("SNR=%.1f dB, RSRP=%.1f dBm sync=in-sync from channel estimator\n",
                  phy->avg_snr_db_cqi[0],
                  phy->avg_rsrp_dbm[0]);
     chest_loop->in_sync();
   } else {
-    log_h->console("SNR=%.1f dB RSRP=%.1f dBm, sync=out-of-sync from channel estimator\n",
+    log_h->debug("SNR=%.1f dB RSRP=%.1f dBm, sync=out-of-sync from channel estimator\n",
                    phy->avg_snr_db_cqi[0],
                    phy->avg_rsrp_dbm[0]);
     chest_loop->out_of_sync();

@@ -160,12 +160,12 @@ void sf_worker::work_imp()
   bool flag=false;
   srslte_ul_sf_cfg_t ul_sf = {};
   srslte_dl_sf_cfg_t dl_sf = {};
-    if(fp==NULL){
-  time_t rawtime;
-  struct tm * timeinfo;
-  char buffer [64];
-  time (&rawtime);
-  timeinfo = localtime (&rawtime);
+   // if(fp==NULL){
+  //time_t rawtime;
+ // struct tm * timeinfo;
+ // char buffer [64];
+ // time (&rawtime);
+ // timeinfo = localtime (&rawtime);
   /*char cwd[150];
    if (getcwd(cwd, sizeof(cwd)) != NULL) {
        printf("Current working dir: %s\n", cwd);
@@ -174,13 +174,13 @@ void sf_worker::work_imp()
         
    }*/
     
-  strftime (buffer,64,"enb/data_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
+  //strftime (buffer,64,"enb/data_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
   //strcat(cwd,buffer);
   //printf("Current working dir: %s\n", buffer);
-  fp=fopen(buffer, "a");
-  if (!fp)
-    perror("fopen");
-  }
+  //fp=fopen(buffer, "a");
+  //if (!fp)
+   // perror("fopen");
+ // }
   // Get Transmission buffers
   srslte::rf_buffer_t tx_buffer = {};
   for (uint32_t cc = 0; cc < phy->get_nof_carriers(); cc++) {
@@ -272,20 +272,20 @@ void sf_worker::work_imp()
 
   Debug("Sending to radio\n");
   
-  if(tx_time.full_secs>=19)
-  {
-  flag=true;
+  //if(tx_time.full_secs>=19)
+  //{
+  //flag=true;
       
      //gettimeofday(&tf, NULL);
     
-    fprintf(fp,"\n Sfworker.cc tti-dl %u tti-ul %u",tti_tx_dl,tti_tx_ul); 
-    fprintf(fp,"\n rnti %u, time %f",dl_grants[0].pdsch->dci.rnti,tx_time.full_secs+tx_time.frac_secs);
+    //fprintf(fp,"\n Sfworker.cc tti-dl %u tti-ul %u",tti_tx_dl,tti_tx_ul); 
+    //fprintf(fp,"\n rnti %u, time %f",dl_grants[0].pdsch->dci.rnti,tx_time.full_secs+tx_time.frac_secs);
     //printf("\n before %f",tx_time.frac_secs);
   //tx_time.frac_secs=tx_time.frac_secs+.00001;
-   }
+  // }
      
-   if(flag==false && tx_time.full_secs+tx_time.frac_secs>18.9 )
-  fprintf(fp,"\n rnti %u, bs pre-attack time %f",dl_grants[0].pdsch->dci.rnti,tx_time.full_secs+tx_time.frac_secs);
+   //if(flag==false && tx_time.full_secs+tx_time.frac_secs>18.9 )
+  //fprintf(fp,"\n rnti %u, bs pre-attack time %f",dl_grants[0].pdsch->dci.rnti,tx_time.full_secs+tx_time.frac_secs);
 
   phy->worker_end(this, tx_buffer, SRSLTE_SF_LEN_PRB(phy->get_nof_prb(0)), tx_time,flag);  
 

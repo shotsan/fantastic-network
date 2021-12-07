@@ -35,7 +35,7 @@ int prach_worker::init(const srslte_cell_t&      cell_,
   prach_cfg = prach_cfg_;
   cell      = cell_;
 
-  max_prach_offset_us = 100;
+  max_prach_offset_us = 50;
   printf("\n Initiating Prach worker");
   if (srslte_prach_init(&prach, srslte_symbol_sz(cell.nof_prb))) {
     return -1;
@@ -70,7 +70,7 @@ void prach_worker::stop()
 void prach_worker::set_max_prach_offset_us(float delay_us)
 {
   max_prach_offset_us = delay_us;
-  max_prach_offset_us =100;
+  max_prach_offset_us =50;
 }
 
 int prach_worker::new_tti(uint32_t tti_rx, cf_t* buffer_rx)

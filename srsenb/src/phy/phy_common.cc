@@ -137,19 +137,6 @@ void phy_common::worker_end(void*                tx_sem_id,
     dl_channel->run(buffer.to_cf_t(), buffer.to_cf_t(), nof_samples, tx_time);
   }
 
-
-
-
-
-/***************************************************************************************/
-/********************Its important to get time stamp here***************************************************/
-
-
-
-
-
-  // printf("\n %f",tx_time.frac_secs);
-  // Always transmit on single radio
   radio->tx(buffer, nof_samples, tx_time,flag);
 
   // Trigger MAC clock

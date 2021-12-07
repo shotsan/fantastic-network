@@ -30,7 +30,7 @@
 #include "srslte/common/log_helper.h"
 #include "srslte/common/rwlock_guard.h"
 #include "srslte/common/time_prof.h"
-
+int ntimes=0;
 //#define WRITE_SIB_PCAP
 using namespace asn1::rrc;
 
@@ -449,6 +449,7 @@ int mac::ta_info(uint32_t tti, uint16_t rnti, float ta_us)
     uint32_t nof_ta_count = ue_db[rnti]->set_ta_us(ta_us);
     if (nof_ta_count) {
       scheduler.dl_mac_buffer_state(rnti, (uint32_t)srslte::dl_sch_lcid::TA_CMD, nof_ta_count);
+      printf("\n l452 mac.cc rnti %d, ta_us %f, %u ",rnti,ta_us,(uint32_t)srslte::dl_sch_lcid::TA_CMD);
     }
   }
   return SRSLTE_SUCCESS;
@@ -820,7 +821,15 @@ int mac::get_ul_sched(uint32_t tti_tx_ul, ul_sched_list_t& ul_sched_res_list)
   // Execute TA FSM
   for (auto& ue : ue_db) {
     uint32_t nof_ta_count = ue.second->tick_ta_fsm();
+    //printf("\n mac.cc l825 before nulling sched: if ta needed %u",nof_ta_count);
+     /*if(nof_ta_count==0)
+     ntimes=1+ntimes;
+     if(ntimes<2)
+     nof_ta_count=1;
+     else
+     nof_ta_count=0;*/
     if (nof_ta_count) {
+      printf("\n mac.cc l825 sched: if ta needed %u",nof_ta_count);
       scheduler.dl_mac_buffer_state(ue.first, (uint32_t)srslte::dl_sch_lcid::TA_CMD, nof_ta_count);
     }
   }

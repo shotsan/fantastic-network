@@ -103,7 +103,8 @@ set gain [x]
 Start srsepc and srsenb
 
 ```
-Here are frequency of rx of enb is hardcode, prints in the terminal should point to the right file to edit to desired frequency, default 2.8 GHZ
+Here are frequency of rx of enb is hardcode, prints in the terminal should point to 
+the right file to edit to desired frequency, default 2.8 GHZ
 
 ```
 

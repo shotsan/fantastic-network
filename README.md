@@ -111,8 +111,9 @@ the right file to edit to desired frequency, default 2.8 GHZ
 At TTI level (1ms), code checks if the tx gain has been changed, if so, it changes tx gain to the gain key set by redis client
 
 
-Known bugs: Some of the debug prints are in time-sensitive loops that can affect performance, please ignore performance or del
+Known bugs: 
 ========
+Some of the debug prints are in time-sensitive loops that can affect performance, please ignore performance or delete
 
 Support:
 =====

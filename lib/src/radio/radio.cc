@@ -19,819 +19,499 @@
  *
  */
 
-#include "srslte/srslte.h"
-extern "C" {
-#include "srslte/phy/rf/rf.h"
-}
-#include "srslte/common/log_filter.h"
-#include "srslte/radio/radio.h"
-#include <list>
-#include <string.h>
+#include <pthread.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include "srslte/common/log.h"
- 
-namespace srslte {
+#include "hiredis.h"
+#include "srslte/common/config_file.h"
+#include "srslte/common/crash_handler.h"
+#include "srslte/common/signal_handler.h"
 
-radio::radio(srslte::log_filter* log_h_) : logger(nullptr), log_h(log_h_), zeros(NULL)
-{
-  zeros = srslte_vec_cf_malloc(SRSLTE_SF_LEN_MAX);
-  srslte_vec_cf_zero(zeros, SRSLTE_SF_LEN_MAX);
-}
+#include <boost/program_options.hpp>
+#include <boost/program_options/parsers.hpp>
+#include <iostream>
+#include <memory>
+#include <string>
 
-radio::radio(srslte::logger* logger_) : logger(logger_), log_h(nullptr), zeros(NULL)
-{
-  zeros = srslte_vec_cf_malloc(SRSLTE_SF_LEN_MAX);
-  srslte_vec_cf_zero(zeros, SRSLTE_SF_LEN_MAX);
-}
+#include "srsenb/hdr/enb.h"
+#include "srsenb/hdr/metrics_csv.h"
+#include "srsenb/hdr/metrics_stdout.h"
 
-radio::~radio()
+using namespace std;
+using namespace srsenb;
+namespace bpo = boost::program_options;
+  #ifdef _MSC_VER
+#include <winsock2.h> /* For struct timeval */
+#endif
+/**********************************************************************
+ *  Program arguments processing
+ ***********************************************************************/
+string config_file;
+
+void parse_args(all_args_t* args, int argc, char* argv[])
 {
-  if (zeros) {
-    free(zeros);
-    zeros = nullptr;
+  string mcc;
+  string mnc;
+  string enb_id;
+
+  // Command line only options
+  bpo::options_description general("General options");
+  // clang-format off
+  general.add_options()
+      ("help,h", "Produce help message")
+      ("version,v", "Print version information and exit")
+      ;
+
+  // Command line or config file options
+  bpo::options_description common("Configuration options");
+  common.add_options()
+
+    ("enb.enb_id",        bpo::value<string>(&enb_id)->default_value("0x0"),                       "eNodeB ID")
+    ("enb.name",          bpo::value<string>(&args->stack.s1ap.enb_name)->default_value("srsenb01"), "eNodeB Name")
+    ("enb.mcc",           bpo::value<string>(&mcc)->default_value("001"),                          "Mobile Country Code")
+    ("enb.mnc",           bpo::value<string>(&mnc)->default_value("01"),                           "Mobile Network Code")
+    ("enb.mme_addr",      bpo::value<string>(&args->stack.s1ap.mme_addr)->default_value("127.0.0.1"),"IP address of MME for S1 connection")
+    ("enb.gtp_bind_addr", bpo::value<string>(&args->stack.s1ap.gtp_bind_addr)->default_value("192.168.3.1"), "Local IP address to bind for GTP connection")
+    ("enb.s1c_bind_addr", bpo::value<string>(&args->stack.s1ap.s1c_bind_addr)->default_value("192.168.3.1"), "Local IP address to bind for S1AP connection")
+    ("enb.n_prb",         bpo::value<uint32_t>(&args->enb.n_prb)->default_value(25),               "Number of PRB")
+    ("enb.nof_ports",     bpo::value<uint32_t>(&args->enb.nof_ports)->default_value(1),            "Number of ports")
+    ("enb.tm",            bpo::value<uint32_t>(&args->enb.transmission_mode)->default_value(1),    "Transmission mode (1-8)")
+    ("enb.p_a",           bpo::value<float>(&args->enb.p_a)->default_value(0.0f),                  "Power allocation rho_a (-6, -4.77, -3, -1.77, 0, 1, 2, 3)")
+
+    ("enb_files.sib_config", bpo::value<string>(&args->enb_files.sib_config)->default_value("sib.conf"), "SIB configuration files")
+    ("enb_files.rr_config",  bpo::value<string>(&args->enb_files.rr_config)->default_value("rr.conf"),   "RR configuration files")
+    ("enb_files.drb_config", bpo::value<string>(&args->enb_files.drb_config)->default_value("drb.conf"), "DRB configuration files")
+
+    ("rf.dl_earfcn",      bpo::value<uint32_t>(&args->enb.dl_earfcn)->default_value(0), "Force Downlink EARFCN for single cell")
+    ("rf.rx_gain",        bpo::value<float>(&args->rf.rx_gain)->default_value(50),        "Front-end receiver gain")
+    ("rf.tx_gain",        bpo::value<float>(&args->rf.tx_gain)->default_value(70),        "Front-end transmitter gain")
+    ("rf.dl_freq",        bpo::value<float>(&args->rf.dl_freq)->default_value(-1),        "Downlink Frequency (if positive overrides EARFCN)")
+    ("rf.ul_freq",        bpo::value<float>(&args->rf.ul_freq)->default_value(-1),        "Uplink Frequency (if positive overrides EARFCN)")
+
+    ("rf.device_name",       bpo::value<string>(&args->rf.device_name)->default_value("auto"),       "Front-end device name")
+    ("rf.device_args",       bpo::value<string>(&args->rf.device_args)->default_value("auto"),       "Front-end device arguments")
+    ("rf.time_adv_nsamples", bpo::value<string>(&args->rf.time_adv_nsamples)->default_value("auto"), "Transmission time advance")
+
+    ("gui.enable",        bpo::value<bool>(&args->gui.enable)->default_value(false),          "Enable GUI plots")
+
+    /* Log section */
+    ("log.rf_level",     bpo::value<string>(&args->rf.log_level),         "RF log level")
+    ("log.phy_level",     bpo::value<string>(&args->phy.log.phy_level),   "PHY log level")
+    ("log.phy_hex_limit", bpo::value<int>(&args->phy.log.phy_hex_limit),  "PHY log hex dump limit")
+    ("log.phy_lib_level", bpo::value<string>(&args->phy.log.phy_lib_level)->default_value("none"), "PHY lib log level")
+    ("log.mac_level",     bpo::value<string>(&args->stack.log.mac_level),   "MAC log level")
+    ("log.mac_hex_limit", bpo::value<int>(&args->stack.log.mac_hex_limit),  "MAC log hex dump limit")
+    ("log.rlc_level",     bpo::value<string>(&args->stack.log.rlc_level),   "RLC log level")
+    ("log.rlc_hex_limit", bpo::value<int>(&args->stack.log.rlc_hex_limit),  "RLC log hex dump limit")
+    ("log.pdcp_level",    bpo::value<string>(&args->stack.log.pdcp_level),  "PDCP log level")
+    ("log.pdcp_hex_limit",bpo::value<int>(&args->stack.log.pdcp_hex_limit), "PDCP log hex dump limit")
+    ("log.rrc_level",     bpo::value<string>(&args->stack.log.rrc_level),   "RRC log level")
+    ("log.rrc_hex_limit", bpo::value<int>(&args->stack.log.rrc_hex_limit),  "RRC log hex dump limit")
+    ("log.gtpu_level",    bpo::value<string>(&args->stack.log.gtpu_level),  "GTPU log level")
+    ("log.gtpu_hex_limit",bpo::value<int>(&args->stack.log.gtpu_hex_limit), "GTPU log hex dump limit")
+    ("log.s1ap_level",    bpo::value<string>(&args->stack.log.s1ap_level),  "S1AP log level")
+    ("log.s1ap_hex_limit",bpo::value<int>(&args->stack.log.s1ap_hex_limit), "S1AP log hex dump limit")
+    ("log.stack_level",    bpo::value<string>(&args->stack.log.stack_level),  "Stack log level")
+    ("log.stack_hex_limit",bpo::value<int>(&args->stack.log.stack_hex_limit), "Stack log hex dump limit")
+
+    ("log.all_level",     bpo::value<string>(&args->log.all_level)->default_value("info"),   "ALL log level")
+    ("log.all_hex_limit", bpo::value<int>(&args->log.all_hex_limit)->default_value(32),  "ALL log hex dump limit")
+
+    ("log.filename",      bpo::value<string>(&args->log.filename)->default_value("/tmp/ue.log"),"Log filename")
+    ("log.file_max_size", bpo::value<int>(&args->log.file_max_size)->default_value(-1), "Maximum file size (in kilobytes). When passed, multiple files are created. Default -1 (single file)")
+
+    /* PCAP */
+    ("pcap.enable",    bpo::value<bool>(&args->stack.mac_pcap.enable)->default_value(false),         "Enable MAC packet captures for wireshark")
+    ("pcap.filename",  bpo::value<string>(&args->stack.mac_pcap.filename)->default_value("enb_mac.pcap"), "MAC layer capture filename")
+    ("pcap.s1ap_enable",   bpo::value<bool>(&args->stack.s1ap_pcap.enable)->default_value(false),         "Enable S1AP packet captures for wireshark")
+    ("pcap.s1ap_filename", bpo::value<string>(&args->stack.s1ap_pcap.filename)->default_value("enb_s1ap.pcap"), "S1AP layer capture filename")
+   
+    /* MCS section */
+    ("scheduler.pdsch_mcs", bpo::value<int>(&args->stack.mac.sched.pdsch_mcs)->default_value(-1), "Optional fixed PDSCH MCS (ignores reported CQIs if specified)")
+    ("scheduler.pdsch_max_mcs", bpo::value<int>(&args->stack.mac.sched.pdsch_max_mcs)->default_value(-1), "Optional PDSCH MCS limit")
+    ("scheduler.pusch_mcs", bpo::value<int>(&args->stack.mac.sched.pusch_mcs)->default_value(-1), "Optional fixed PUSCH MCS (ignores reported CQIs if specified)")
+    ("scheduler.pusch_max_mcs", bpo::value<int>(&args->stack.mac.sched.pusch_max_mcs)->default_value(-1), "Optional PUSCH MCS limit")
+    ("scheduler.max_aggr_level", bpo::value<int>(&args->stack.mac.sched.max_aggr_level)->default_value(-1), "Optional maximum aggregation level index (l=log2(L)) ")
+    ("scheduler.max_nof_ctrl_symbols", bpo::value<uint32_t>(&args->stack.mac.sched.max_nof_ctrl_symbols)->default_value(3), "Number of control symbols")
+    ("scheduler.min_nof_ctrl_symbols", bpo::value<uint32_t>(&args->stack.mac.sched.min_nof_ctrl_symbols)->default_value(1), "Minimum number of control symbols")
+
+    /* Downlink Channel emulator section */
+    ("channel.dl.enable", bpo::value<bool>(&args->phy.dl_channel_args.enable)->default_value(false), "Enable/Disable internal Downlink channel emulator")
+    ("channel.dl.awgn.enable", bpo::value<bool>(&args->phy.dl_channel_args.awgn_enable)->default_value(false), "Enable/Disable AWGN simulator")
+    ("channel.dl.awgn.n0", bpo::value<float>(&args->phy.dl_channel_args.awgn_n0_dBfs)->default_value(-30.0f), "Noise level in decibels full scale (dBfs)")
+    ("channel.dl.fading.enable", bpo::value<bool>(&args->phy.dl_channel_args.fading_enable)->default_value(false), "Enable/Disable Fading model")
+    ("channel.dl.fading.model", bpo::value<std::string>(&args->phy.dl_channel_args.fading_model)->default_value("none"), "Fading model + maximum doppler (E.g. none, epa5, eva70, etu300, etc)")
+    ("channel.dl.delay.enable", bpo::value<bool>(&args->phy.dl_channel_args.delay_enable)->default_value(false), "Enable/Disable Delay simulator")
+    ("channel.dl.delay.period_s", bpo::value<float>(&args->phy.dl_channel_args.delay_period_s)->default_value(3600), "Delay period in seconds (integer)")
+    ("channel.dl.delay.init_time_s", bpo::value<float>(&args->phy.dl_channel_args.delay_init_time_s)->default_value(0), "Initial time in seconds")
+    ("channel.dl.delay.maximum_us", bpo::value<float>(&args->phy.dl_channel_args.delay_max_us)->default_value(100.0f), "Maximum delay in microseconds")
+    ("channel.dl.delay.minimum_us", bpo::value<float>(&args->phy.dl_channel_args.delay_min_us)->default_value(10.0f), "Minimum delay in microseconds")
+    ("channel.dl.rlf.enable", bpo::value<bool>(&args->phy.dl_channel_args.rlf_enable)->default_value(false), "Enable/Disable Radio-Link Failure simulator")
+    ("channel.dl.rlf.t_on_ms", bpo::value<uint32_t >(&args->phy.dl_channel_args.rlf_t_on_ms)->default_value(10000), "Time for On state of the channel (ms)")
+    ("channel.dl.rlf.t_off_ms", bpo::value<uint32_t >(&args->phy.dl_channel_args.rlf_t_off_ms)->default_value(2000), "Time for Off state of the channel (ms)")
+    ("channel.dl.hst.enable", bpo::value<bool>(&args->phy.dl_channel_args.hst_enable)->default_value(false), "Enable/Disable HST simulator")
+    ("channel.dl.hst.period_s", bpo::value<float>(&args->phy.dl_channel_args.hst_period_s)->default_value(7.2f), "HST simulation period in seconds")
+    ("channel.dl.hst.fd_hz", bpo::value<float>(&args->phy.dl_channel_args.hst_fd_hz)->default_value(+750.0f), "Doppler frequency in Hz")
+    ("channel.dl.hst.init_time_s", bpo::value<float>(&args->phy.dl_channel_args.hst_init_time_s)->default_value(0), "Initial time in seconds")
+
+    /* Uplink Channel emulator section */
+    ("channel.ul.enable", bpo::value<bool>(&args->phy.ul_channel_args.enable)->default_value(false), "Enable/Disable internal Uplink channel emulator")
+    ("channel.ul.awgn.enable", bpo::value<bool>(&args->phy.ul_channel_args.awgn_enable)->default_value(false), "Enable/Disable AWGN simulator")
+    ("channel.ul.awgn.n0", bpo::value<float>(&args->phy.ul_channel_args.awgn_n0_dBfs)->default_value(-30.0f), "Noise level in decibels full scale (dBfs)")
+    ("channel.ul.fading.enable", bpo::value<bool>(&args->phy.ul_channel_args.fading_enable)->default_value(false), "Enable/Disable Fading model")
+    ("channel.ul.fading.model", bpo::value<std::string>(&args->phy.ul_channel_args.fading_model)->default_value("none"), "Fading model + maximum doppler (E.g. none, epa5, eva70, etu300, etc)")
+    ("channel.ul.delay.enable", bpo::value<bool>(&args->phy.ul_channel_args.delay_enable)->default_value(false), "Enable/Disable Delay simulator")
+    ("channel.ul.delay.period_s", bpo::value<float>(&args->phy.ul_channel_args.delay_period_s)->default_value(3600), "Delay period in seconds (integer)")
+    ("channel.ul.delay.init_time_s", bpo::value<float>(&args->phy.ul_channel_args.delay_init_time_s)->default_value(0), "Initial time in seconds")
+    ("channel.ul.delay.maximum_us", bpo::value<float>(&args->phy.ul_channel_args.delay_max_us)->default_value(100.0f), "Maximum delay in microseconds")
+    ("channel.ul.delay.minimum_us", bpo::value<float>(&args->phy.ul_channel_args.delay_min_us)->default_value(10.0f), "Minimum delay in microseconds")
+    ("channel.ul.rlf.enable", bpo::value<bool>(&args->phy.ul_channel_args.rlf_enable)->default_value(false), "Enable/Disable Radio-Link Failure simulator")
+    ("channel.ul.rlf.t_on_ms", bpo::value<uint32_t >(&args->phy.ul_channel_args.rlf_t_on_ms)->default_value(10000), "Time for On state of the channel (ms)")
+    ("channel.ul.rlf.t_off_ms", bpo::value<uint32_t >(&args->phy.ul_channel_args.rlf_t_off_ms)->default_value(2000), "Time for Off state of the channel (ms)")
+    ("channel.ul.hst.enable", bpo::value<bool>(&args->phy.ul_channel_args.hst_enable)->default_value(false), "Enable/Disable HST simulator")
+    ("channel.ul.hst.period_s", bpo::value<float>(&args->phy.ul_channel_args.hst_period_s)->default_value(7.2f), "HST simulation period in seconds")
+    ("channel.ul.hst.fd_hz", bpo::value<float>(&args->phy.ul_channel_args.hst_fd_hz)->default_value(-750.0f), "Doppler frequency in Hz")
+    ("channel.ul.hst.init_time_s", bpo::value<float>(&args->phy.ul_channel_args.hst_init_time_s)->default_value(0), "Initial time in seconds")
+
+      /* Expert section */
+    ("expert.metrics_period_secs", bpo::value<float>(&args->general.metrics_period_secs)->default_value(1.0), "Periodicity for metrics in seconds")
+    ("expert.metrics_csv_enable",  bpo::value<bool>(&args->general.metrics_csv_enable)->default_value(false), "Write metrics to CSV file")
+    ("expert.metrics_csv_filename", bpo::value<string>(&args->general.metrics_csv_filename)->default_value("/tmp/enb_metrics.csv"), "Metrics CSV filename")
+    ("expert.pusch_max_its", bpo::value<int>(&args->phy.pusch_max_its)->default_value(8), "Maximum number of turbo decoder iterations")
+    ("expert.pusch_8bit_decoder", bpo::value<bool>(&args->phy.pusch_8bit_decoder)->default_value(false), "Use 8-bit for LLR representation and turbo decoder trellis computation (Experimental)")
+    ("expert.pusch_meas_evm", bpo::value<bool>(&args->phy.pusch_meas_evm)->default_value(false), "Enable/Disable PUSCH EVM measure")
+    ("expert.tx_amplitude", bpo::value<float>(&args->phy.tx_amplitude)->default_value(0.6), "Transmit amplitude factor")
+    ("expert.nof_phy_threads", bpo::value<int>(&args->phy.nof_phy_threads)->default_value(3), "Number of PHY threads")
+    ("expert.link_failure_nof_err", bpo::value<int>(&args->stack.mac.link_failure_nof_err)->default_value(100), "Number of PUSCH failures after which a radio-link failure is triggered")
+    ("expert.max_prach_offset_us", bpo::value<float>(&args->phy.max_prach_offset_us)->default_value(50), "Maximum allowed RACH offset (in us)")
+    ("expert.equalizer_mode", bpo::value<string>(&args->phy.equalizer_mode)->default_value("mmse"), "Equalizer mode")
+    ("expert.estimator_fil_w", bpo::value<float>(&args->phy.estimator_fil_w)->default_value(0.1), "Chooses the coefficients for the 3-tap channel estimator centered filter.")
+    ("expert.rrc_inactivity_timer", bpo::value<uint32_t>(&args->general.rrc_inactivity_timer)->default_value(60000), "Inactivity timer in ms")
+    ("expert.print_buffer_state", bpo::value<bool>(&args->general.print_buffer_state)->default_value(false), "Prints on the console the buffer state every 10 seconds")
+    ("expert.eea_pref_list", bpo::value<string>(&args->general.eea_pref_list)->default_value("EEA0, EEA2, EEA1"), "Ordered preference list for the selection of encryption algorithm (EEA) (default: EEA0, EEA2, EEA1).")
+    ("expert.eia_pref_list", bpo::value<string>(&args->general.eia_pref_list)->default_value("EIA2, EIA1, EIA0"), "Ordered preference list for the selection of integrity algorithm (EIA) (default: EIA2, EIA1, EIA0).")
+
+    // eMBMS section
+    ("embms.enable", bpo::value<bool>(&args->stack.embms.enable)->default_value(false), "Enables MBMS in the eNB")
+    ("embms.m1u_multiaddr", bpo::value<string>(&args->stack.embms.m1u_multiaddr)->default_value("239.255.0.1"), "M1-U Multicast address the eNB joins.")
+    ("embms.m1u_if_addr", bpo::value<string>(&args->stack.embms.m1u_if_addr)->default_value("127.0.1.201"), "IP address of the interface the eNB will listen for M1-U traffic.")
+    ;
+
+  // Positional options - config file location
+  bpo::options_description position("Positional options");
+  position.add_options()
+    ("config_file", bpo::value< string >(&config_file), "eNodeB configuration file")
+  ;
+
+  // clang-format on
+  bpo::positional_options_description p;
+  p.add("config_file", -1);
+
+  // these options are allowed on the command line
+  bpo::options_description cmdline_options;
+  cmdline_options.add(common).add(position).add(general);
+
+  // parse the command line and store result in vm
+  bpo::variables_map vm;
+  try {
+    bpo::store(bpo::command_line_parser(argc, argv).options(cmdline_options).positional(p).run(), vm);
+    bpo::notify(vm);
+  } catch (bpo::error& e) {
+    cerr << e.what() << endl;
+    exit(1);
   }
-}
+  // help option was given - print usage and exit
+  if (vm.count("help")) {
+    cout << "Usage: " << argv[0] << " [OPTIONS] config_file" << endl << endl;
+    cout << common << endl << general << endl;
+    exit(0);
+  }
 
-int radio::init(const rf_args_t& args, phy_interface_radio* phy_)
-{
-  phy = phy_;
+  // print version number and exit
+  if (vm.count("version")) {
+    cout << "Version " << srslte_get_version_major() << "." << srslte_get_version_minor() << "."
+         << srslte_get_version_patch() << endl;
+    exit(0);
+  }
 
-  // Init log
-  if (log_h == nullptr) {
-    if (logger != nullptr) {
-      log_local.init("RF  ", logger);
-      log_local.set_level(args.log_level);
-      log_h = &log_local;
-    } else {
-      fprintf(stderr, "Must all radio constructor with either logger or log_filter\n");
-      return SRSLTE_ERROR;
+  // if no config file given, check users home path
+  if (!vm.count("config_file")) {
+    if (!config_exists(config_file, "enb.conf")) {
+      cout << "Failed to read eNB configuration file " << config_file << " - exiting" << endl;
+      exit(1);
     }
   }
 
-  if (args.nof_antennas > SRSLTE_MAX_PORTS) {
-    log_h->error("Maximum number of antennas exceeded (%d > %d)\n", args.nof_antennas, SRSLTE_MAX_PORTS);
-    return SRSLTE_ERROR;
+  cout << "Reading configuration file " << config_file << "..." << endl;
+  ifstream conf(config_file.c_str(), ios::in);
+  if (conf.fail()) {
+    cout << "Failed to read configuration file " << config_file << " - exiting" << endl;
+    exit(1);
   }
 
-  if (args.nof_carriers > SRSLTE_MAX_CARRIERS) {
-    log_h->error("Maximum number of carriers exceeded (%d > %d)\n", args.nof_carriers, SRSLTE_MAX_CARRIERS);
-    return SRSLTE_ERROR;
+  // parse config file and handle errors gracefully
+  try {
+    bpo::store(bpo::parse_config_file(conf, common), vm);
+    bpo::notify(vm);
+  } catch (const boost::program_options::error& e) {
+    cerr << e.what() << endl;
+    exit(1);
   }
 
-  if (!config_rf_channels(args)) {
-    log_h->console("Error configuring RF channels\n");
-    return SRSLTE_ERROR;
+  // Convert MCC/MNC strings
+  if (!srslte::string_to_mcc(mcc, &args->stack.s1ap.mcc)) {
+    cout << "Error parsing enb.mcc:" << mcc << " - must be a 3-digit string." << endl;
+  }
+  if (!srslte::string_to_mnc(mnc, &args->stack.s1ap.mnc)) {
+    cout << "Error parsing enb.mnc:" << mnc << " - must be a 2 or 3-digit string." << endl;
   }
 
-  nof_channels = args.nof_antennas * args.nof_carriers;
-  nof_antennas = args.nof_antennas;
-  nof_carriers = args.nof_carriers;
-
-  cur_tx_freqs.resize(nof_carriers);
-  cur_rx_freqs.resize(nof_carriers);
-
-  // Init and start Radio
-  char* device_args = nullptr;
-  if (args.device_args != "auto") {
-    device_args = (char*)args.device_args.c_str();
-  }
-  char* dev_name = nullptr;
-  if (args.device_name != "auto") {
-    dev_name = (char*)args.device_name.c_str();
-  }
-  log_h->console("Opening %d channels in RF device=%s with args=%s\n",
-                 nof_channels,
-                 dev_name ? dev_name : "default",
-                 device_args ? device_args : "default");
-  if (srslte_rf_open_devname(&rf_device, dev_name, device_args, nof_channels)) {
-    log_h->error("Error opening RF device\n");
-    return SRSLTE_ERROR;
+  if (args->stack.embms.enable) {
+    if (args->stack.mac.sched.max_nof_ctrl_symbols == 3) {
+      fprintf(stderr,
+              "nof_ctrl_symbols = %d, While using MBMS, please set number of control symbols to either 1 or 2, "
+              "depending on the length of the non-mbsfn region\n",
+              args->stack.mac.sched.max_nof_ctrl_symbols);
+      exit(1);
+    }
   }
 
-  is_start_of_burst = true;
-  is_initialized    = true;
-
-  // Set RF options
-  tx_adv_auto = true;
-  if (args.time_adv_nsamples != "auto") {
-    int t = (int)strtol(args.time_adv_nsamples.c_str(), nullptr, 10);
-    set_tx_adv(abs(t));
-    set_tx_adv_neg(t < 0);
+  // Covert eNB Id
+  std::size_t pos = {};
+  try {
+    args->enb.enb_id = std::stoi(enb_id, &pos, 0);
+  } catch (...) {
+    cout << "Error parsing enb.enb_id: " << enb_id << "." << endl;
+    exit(1);
   }
-  continuous_tx = true;
-  if (args.continuous_tx != "auto") {
-    continuous_tx = (args.continuous_tx == "yes");
+  if (pos != enb_id.size()) {
+    cout << "Error parsing enb.enb_id: " << enb_id << "." << endl;
+    exit(1);
   }
 
-  // Set fixed gain options
-  if (args.rx_gain < 0) {
-    start_agc(false);
+  // Apply all_level to any unset layers
+  if (vm.count("log.all_level")) {
+    if (!vm.count("log.rf_level")) {
+      args->rf.log_level = args->log.all_level;
+    }
+    if (!vm.count("log.phy_level")) {
+      args->phy.log.phy_level = args->log.all_level;
+    }
+    if (!vm.count("log.phy_lib_level")) {
+      args->phy.log.phy_lib_level = args->log.all_level;
+    }
+    if (!vm.count("log.mac_level")) {
+      args->stack.log.mac_level = args->log.all_level;
+    }
+    if (!vm.count("log.rlc_level")) {
+      args->stack.log.rlc_level = args->log.all_level;
+    }
+    if (!vm.count("log.pdcp_level")) {
+      args->stack.log.pdcp_level = args->log.all_level;
+    }
+    if (!vm.count("log.rrc_level")) {
+      args->stack.log.rrc_level = args->log.all_level;
+    }
+    if (!vm.count("log.gtpu_level")) {
+      args->stack.log.gtpu_level = args->log.all_level;
+    }
+    if (!vm.count("log.s1ap_level")) {
+      args->stack.log.s1ap_level = args->log.all_level;
+    }
+    if (!vm.count("log.stack_level")) {
+      args->stack.log.stack_level = args->log.all_level;
+    }
+  }
+
+  // Apply all_hex_limit to any unset layers
+  if (vm.count("log.all_hex_limit")) {
+    if (!vm.count("log.phy_hex_limit")) {
+      args->log.phy_hex_limit = args->log.all_hex_limit;
+    }
+    if (!vm.count("log.mac_hex_limit")) {
+      args->stack.log.mac_hex_limit = args->log.all_hex_limit;
+    }
+    if (!vm.count("log.rlc_hex_limit")) {
+      args->stack.log.rlc_hex_limit = args->log.all_hex_limit;
+    }
+    if (!vm.count("log.pdcp_hex_limit")) {
+      args->stack.log.pdcp_hex_limit = args->log.all_hex_limit;
+    }
+    if (!vm.count("log.rrc_hex_limit")) {
+      args->stack.log.rrc_hex_limit = args->log.all_hex_limit;
+    }
+    if (!vm.count("log.gtpu_hex_limit")) {
+      args->stack.log.gtpu_hex_limit = args->log.all_hex_limit;
+    }
+    if (!vm.count("log.s1ap_hex_limit")) {
+      args->stack.log.s1ap_hex_limit = args->log.all_hex_limit;
+    }
+    if (!vm.count("log.stack_hex_limit")) {
+      args->stack.log.stack_hex_limit = args->log.all_hex_limit;
+    }
+  }
+
+  // Check remaining eNB config files
+  if (!config_exists(args->enb_files.sib_config, "sib.conf")) {
+    cout << "Failed to read SIB configuration file " << args->enb_files.sib_config << " - exiting" << endl;
+    exit(1);
+  }
+
+  if (!config_exists(args->enb_files.rr_config, "rr.conf")) {
+    cout << "Failed to read RR configuration file " << args->enb_files.rr_config << " - exiting" << endl;
+    exit(1);
+  }
+
+  if (!config_exists(args->enb_files.drb_config, "drb.conf")) {
+    cout << "Failed to read DRB configuration file " << args->enb_files.drb_config << " - exiting" << endl;
+    exit(1);
+  }
+}
+
+static bool do_metrics = false;
+
+void* input_loop(void* m)
+{
+  metrics_stdout* metrics = (metrics_stdout*)m;
+  char            key;
+  while (running) {
+    cin >> key;
+    if (cin.eof() || cin.bad()) {
+      cout << "Closing stdin thread." << endl;
+      break;
+    } else {
+      if ('t' == key) {
+        do_metrics = !do_metrics;
+        if (do_metrics) {
+          cout << "Enter t to stop trace Santosh." << endl;
+        } else {
+          cout << "Enter t to restart trace." << endl;
+        }
+        metrics->toggle_print(do_metrics);
+      } else if ('q' == key) {
+        raise(SIGTERM);
+      }
+    }
+  }
+  return nullptr;
+}
+
+int main(int argc, char* argv[])
+{
+  srslte_register_signal_handler();
+  all_args_t                         args = {};
+  srslte::metrics_hub<enb_metrics_t> metricshub;
+  metrics_stdout                     metrics_screen;
+   
+
+
+ // COMMENTING REDIS CODE
+   
+  /* 
+    unsigned int j, isunix = 0;
+    redisContext *c;
+    redisReply *reply;
+    const char *hostname =  "127.0.0.1";
+
+    
+
+    int port =  6379;
+
+    struct timeval timeout = { 1, 500000 }; // 1.5 seconds
+    if (isunix) {
+        c = (struct redisContext*) redisConnectUnixWithTimeout(hostname, timeout);
+    } else {
+        c = (struct redisContext*)  redisConnectWithTimeout(hostname, port, timeout);
+    }
+    if (c == NULL || c->err) {
+        if (c) {
+            printf("Connection error: %s\n", c->errstr);
+            redisFree(c);
+        } else {
+            printf("Connection error: can't allocate redis context\n");
+        }
+        exit(1);
+    }*/
+/*
+    /* PING server */
+  /*  reply = (struct redisReply*)  redisCommand(c,"PING");
+    printf("PING: %s\n", reply->str);
+    freeReplyObject(reply);
+
+    /* Set a key */
+  /*  reply = (struct redisReply*)  redisCommand(c,"SET %s %s", "foo", "hello world");
+    printf("SET: %s\n", reply->str);
+    freeReplyObject(reply);
+
+    reply = (struct redisReply*) redisCommand(c,"GET foo");
+    printf("GET foo: %s\n", reply->str);
+    freeReplyObject(reply);*/
+
+ cout << "---  Software Radio Systems LTE eNodeB  ---" << endl << endl;
+
+
+  srslte_debug_handle_crash(argc, argv);
+  parse_args(&args, argc, argv);
+
+  srslte::logger_stdout logger_stdout;
+
+  // Set logger
+  srslte::logger* logger = nullptr;
+  if (args.log.filename == "stdout") {
+    logger = &logger_stdout;
   } else {
-    set_rx_gain(args.rx_gain);
+    logger_file.init(args.log.filename, args.log.file_max_size);
+    logger = &logger_file;
   }
-  if (args.tx_gain > 0) {
-    set_tx_gain(args.tx_gain);
-  } else {
-    // Set same gain than for RX until power control sets a gain
-    set_tx_gain(args.rx_gain);
-    log_h->console("\nWarning: TX gain was not set. Using open-loop power control (not working properly)\n\n");
+  srslte::logmap::set_default_logger(logger);
+  srslte::logmap::get("COMMON")->set_level(srslte::LOG_LEVEL_INFO);
+
+  // Create eNB
+  unique_ptr<srsenb::enb> enb{new srsenb::enb};
+  if (enb->init(args, logger) != SRSLTE_SUCCESS) {
+    enb->stop();
+    return SRSLTE_ERROR;
   }
 
-  // Frequency offset
-  freq_offset = args.freq_offset;
+  // Set metrics
+  metricshub.init(enb.get(), args.general.metrics_period_secs);
+  metricshub.add_listener(&metrics_screen);
+  metrics_screen.set_handle(enb.get());
 
-  // Get device info
-  rf_info = *get_info();
+  srsenb::metrics_csv metrics_file(args.general.metrics_csv_filename);
+  if (args.general.metrics_csv_enable) {
+    metricshub.add_listener(&metrics_file);
+    metrics_file.set_handle(enb.get());
+  }
 
-  // Suppress radio stdout
-  srslte_rf_suppress_stdout(&rf_device);
+  // create input thread
+  pthread_t input;
+  pthread_create(&input, nullptr, &input_loop, &metrics_screen);
 
-  // Register handler for processing O/U/L
-  srslte_rf_register_error_handler(&rf_device, rf_msg_callback, this);
+  bool signals_pregenerated = false;
+  if (running) {
+    if (args.gui.enable) {
+      enb->start_plot();
+    }
+  }
+  int cnt = 0;
+  while (running) {
+    if (args.general.print_buffer_state) {
+      cnt++;
+      if (cnt == 1000) {
+        cnt = 0;
+        enb->print_pool();
+      }
+    }
+    usleep(10000);
+  }
+  pthread_cancel(input);
+  pthread_join(input, NULL);
+  metricshub.stop();
+  enb->stop();
+  cout << "---  exiting  ---" << endl;
 
   return SRSLTE_SUCCESS;
 }
-
-bool radio::is_init()
-{
-  return is_initialized;
-}
-
-void radio::stop()
-{
-  if (zeros) {
-    free(zeros);
-    zeros = NULL;
-  }
-  if (is_initialized) {
-    srslte_rf_close(&rf_device);
-  }
-}
-
-void radio::reset()
-{
-  srslte_rf_stop_rx_stream(&rf_device);
-  radio_is_streaming = false;
-  usleep(100000);
-}
-
-bool radio::is_continuous_tx()
-{
-  return continuous_tx;
-}
-
-void radio::set_tx_adv(int nsamples)
-{
-  tx_adv_auto     = false;
-  tx_adv_nsamples = nsamples;
-  if (!nsamples) {
-    tx_adv_sec = 0;
-  }
-}
-
-void radio::set_tx_adv_neg(bool tx_adv_is_neg)
-{
-  tx_adv_negative = tx_adv_is_neg;
-}
-
-bool radio::start_agc(bool tx_gain_same_rx)
-{
-  if (!is_initialized) {
-    return false;
-  }
-  if (srslte_rf_start_gain_thread(&rf_device, tx_gain_same_rx)) {
-    ERROR("Error starting AGC Thread RF device\n");
-    return false;
-  }
-
-  return true;
-}
-
-bool radio::rx_now(rf_buffer_interface& buffer, const uint32_t& nof_samples, srslte_timestamp_t* rxd_time)
-{
-  if (!is_initialized) {
-    return false;
-  }
-  bool ret = true;
-
-  if (!radio_is_streaming) {
-    srslte_rf_start_rx_stream(&rf_device, false);
-    radio_is_streaming = true;
-  }
-
-  time_t* full_secs = rxd_time ? &rxd_time->full_secs : NULL;
-  double* frac_secs = rxd_time ? &rxd_time->frac_secs : NULL;
-
-  void* radio_buffers[SRSLTE_MAX_CHANNELS] = {};
-  if (!map_channels(rx_channel_mapping, 0, buffer, radio_buffers)) {
-    log_h->error("Mapping logical channels to physical channels for transmission\n");
-    return false;
-  }
-   /*if(*full_secs+*frac_secs>19.9 && *full_secs+*frac_secs<20.1)
-   printf("\n rx_time %f",*full_secs+*frac_secs);-*/
-  if (srslte_rf_recv_with_time_multi(&rf_device, radio_buffers, nof_samples, true, full_secs, frac_secs) > 0) {
-    ret = true;
-  } else {
-    ret = false;
-  }
-
-  return ret;
-}
-
-void radio::get_time(srslte_timestamp_t* now)
-{
-  if (!is_initialized) {
-    return;
-  }
-  srslte_rf_get_time(&rf_device, &now->full_secs, &now->frac_secs);
-}
-
-float radio::get_rssi()
-{
-  if (!is_initialized) {
-    return 0.0f;
-  }
-  return srslte_rf_get_rssi(&rf_device);
-}
-
-bool radio::has_rssi()
-{
-  if (!is_initialized) {
-    return false;
-  }
-  return srslte_rf_has_rssi(&rf_device);
-}
-
-bool radio::tx(rf_buffer_interface& buffer, const uint32_t& nof_samples_, const srslte_timestamp_t& tx_time_, bool flag)
-{
-  uint32_t nof_samples   = nof_samples_;
-  uint32_t sample_offset = 0;
-  /*  double ta =0;
-   if(fp1==NULL){
-  time_t rawtime;
-  struct tm * timeinfo;
-  char buffer [64];
-  time (&rawtime);
-  timeinfo = localtime (&rawtime);
-   is_start_of_burst = true;
-  /*char cwd[150];
-   if (getcwd(cwd, sizeof(cwd)) != NULL) {
-       printf("Current working dir: %s\n", cwd);
-   } else {
-       perror("getcwd() error");
-        
-   }*/
-    
-  /*strftime (buffer,64,"enb/radiotime_%b_%d_%H_%M.txt",timeinfo);//generate string SA_TEST_DATE_TIME
-  fp1=fopen(buffer, "a");
-  if (!fp1)
-    perror("fopen");
-  }*/
-  // Return instantly if the radio module is not initialised
-  if (!is_initialized) {
-    return false;
-  }
-
-  // Copy timestamp and add Tx time offset calibration
-  srslte_timestamp_t tx_time = tx_time_;
-  if (!tx_adv_negative) {
-    srslte_timestamp_sub(&tx_time, 0, tx_adv_sec);
-  } else {
-    srslte_timestamp_add(&tx_time, 0, tx_adv_sec);
-  }
-  
-
-  // Save possible end of burst time
-//  if(flag==false && tx_time.full_secs+tx_time.frac_secs>18.9)
-//    fprintf(fp1,"\n Radio.cc l 362, original base station tx tti time %f, samples %d",tx_time.full_secs+tx_time.frac_secs,nof_samples);
-//  if (flag==true)
-//  { 
-    //srslte_timestamp_t tf;
-    //tf.frac_secs=0;
-    //tf.full_secs=0;
-//    tx_time.frac_secs=tx_time.frac_secs+ta;
-//    end_of_burst_time.frac_secs=end_of_burst_time.frac_secs+ta;
- ////   fprintf(fp1,"\n Radio.cc l 362, after delayingtx tti time %f, samples %d",tx_time.full_secs+tx_time.frac_secs,sample_offset);
-    //srslte_rf_get_time(&rf_device,&tf.full_secs,&tf.frac_secs);
-   // log_h->console("time tti %ld.%f", tx.full_secs,tx.frac_secs );
-//  }
-  // Calculate transmission overlap/gap if it is not start of the burst
-  if (not is_start_of_burst) {
-    // Calculates transmission time overlap with previous transmission
-    srslte_timestamp_t ts_overlap = end_of_burst_time;
-    srslte_timestamp_sub(&ts_overlap, tx_time.full_secs, tx_time.frac_secs);
-
-    // Calculates number of overlap samples with previous transmission
-    int32_t past_nsamples = (int32_t)round(cur_tx_srate * srslte_timestamp_real(&ts_overlap));
-     
-    // if past_nsamples is positive, the current transmission overlaps with the previous transmission. If it is negative
-    // there is a gap between the previous transmission and the current transmission.
-    if (past_nsamples > 0) {
-      // If the overlap length is greater than the current transmission length, it means the whole transmission is in
-      // the past and it shall be ignored
-      if ((int32_t)nof_samples < past_nsamples) {
-        return true;
-      }
-
-      // Trim the first past_nsamples
-      sample_offset = (uint32_t)past_nsamples;     // Sets an offset for moving first samples offset
-      tx_time       = end_of_burst_time;           // Keeps same transmission time
-      nof_samples   = nof_samples - past_nsamples; // Subtracts the number of trimmed samples
-
-    } else if (past_nsamples < 0) {
-      // if the gap is bigger than TX_MAX_GAP_ZEROS, stop burst
-      if (fabs(srslte_timestamp_real(&ts_overlap)) > tx_max_gap_zeros) {
-        tx_end();
-      } else {
-        // Otherwise, transmit zeros
-        uint32_t gap_nsamples = abs(past_nsamples);
-        while (gap_nsamples > 0) {
-          // Transmission cannot exceed SRSLTE_SF_LEN_MAX (zeros buffer size limitation)
-          uint32_t nzeros = SRSLTE_MIN(gap_nsamples, SRSLTE_SF_LEN_MAX);
-
-          // Zeros transmission
-          int ret = srslte_rf_send_timed2(
-              &rf_device, zeros, nzeros, end_of_burst_time.full_secs, end_of_burst_time.frac_secs, false, false);
-          if (ret < SRSLTE_SUCCESS) {
-            return false;
-          }
-
-          // Substract gap samples
-          gap_nsamples -= nzeros;
-
-          // Increase timestamp
-          srslte_timestamp_add(&end_of_burst_time, 0, (double)nzeros / cur_tx_srate);
-        }
-      }
-    }
-  }
-  
-  srslte_timestamp_copy(&end_of_burst_time, &tx_time);
-  srslte_timestamp_add(&end_of_burst_time, 0, (double)nof_samples / cur_tx_srate);
- /* if (flag==true)
-  { 
-    //srslte_timestamp_t tf;
-    //tf.frac_secs=0;
-    //tf.full_secs=0;
-    //tx_time.frac_secs=+tx_time.frac_secs+.000001;
-    end_of_burst_time.frac_secs=end_of_burst_time.frac_secs-ta;
-    fprintf(fp1,"\n Radio.cc l 362, actual air tx tti time %f, samples %d",tx_time.full_secs+tx_time.frac_secs,sample_offset);
-    //srslte_rf_get_time(&rf_device,&tf.full_secs,&tf.frac_secs);
-   // log_h->console("time tti %ld.%f", tx.full_secs,tx.frac_secs );
-  }*/
-  void* radio_buffers[SRSLTE_MAX_CHANNELS] = {};
-  if (!map_channels(rx_channel_mapping, sample_offset, buffer, radio_buffers)) {
-    log_h->error("Mapping logical channels to physical channels for transmission\n");
-    return false;
-  }
-
-
-
-  int ret = srslte_rf_send_timed_multi(
-      &rf_device, radio_buffers, nof_samples, tx_time.full_secs, tx_time.frac_secs, true, is_start_of_burst, false);
- // is_start_of_burst = false;
-
-  return ret > SRSLTE_SUCCESS;
-}
-
-void radio::tx_end()
-{
-  if (!is_initialized) {
-    return;
-  }
-  if (!is_start_of_burst) {
-    srslte_rf_send_timed2(&rf_device, zeros, 0, end_of_burst_time.full_secs, end_of_burst_time.frac_secs, false, true);
-    is_start_of_burst = true;
-  }
-}
-
-bool radio::get_is_start_of_burst()
-{
-  return is_start_of_burst;
-}
-
-void radio::release_freq(const uint32_t& carrier_idx)
-{
-  rx_channel_mapping.release_freq(carrier_idx);
-  tx_channel_mapping.release_freq(carrier_idx);
-}
-
-void radio::set_rx_freq(const uint32_t& carrier_idx, const double& freq)
-{
-  if (!is_initialized) {
-    return;
-  }
-
-  // First release mapping
-  rx_channel_mapping.release_freq(carrier_idx);
-
-  // Map carrier index to physical channel
-  if (rx_channel_mapping.allocate_freq(carrier_idx, freq)) {
-    uint32_t physical_channel_idx = rx_channel_mapping.get_carrier_idx(carrier_idx);
-    log_h->info("Mapping RF channel %d to logical carrier %d on f_rx=%.1f MHz\n",
-                physical_channel_idx * nof_antennas,
-                carrier_idx,
-                freq / 1e6);
-    if (cur_rx_freqs[physical_channel_idx] != freq) {
-      if ((physical_channel_idx + 1) * nof_antennas <= nof_channels) {
-        cur_rx_freqs[physical_channel_idx] = freq;
-        for (uint32_t i = 0; i < nof_antennas; i++) {
-          srslte_rf_set_rx_freq(&rf_device, physical_channel_idx * nof_antennas + i, freq + freq_offset);
-        }
-      } else {
-        log_h->error("set_rx_freq: physical_channel_idx=%d for %d antennas exceeds maximum channels (%d)\n",
-                     physical_channel_idx,
-                     nof_antennas,
-                     nof_channels);
-      }
-    } else {
-      log_h->info("RF channel %d already on freq\n", physical_channel_idx * nof_antennas);
-    }
-  } else {
-    log_h->error("set_rx_freq: Could not allocate frequency %.1f MHz to carrier %d\n", freq / 1e6, carrier_idx);
-  }
-}
-
-void radio::set_rx_gain(const float& gain)
-{
-  if (!is_initialized) {
-    return;
-  }
-  srslte_rf_set_rx_gain(&rf_device, gain);
-}
-
-void radio::set_rx_gain_th(const float& gain)
-{
-  if (!is_initialized) {
-    return;
-  }
-  srslte_rf_set_rx_gain_th(&rf_device, gain);
-}
-
-void radio::set_rx_srate(const double& srate)
-{
-  if (!is_initialized) {
-    return;
-  }
-  srslte_rf_set_rx_srate(&rf_device, srate);
-}
-
-void radio::set_tx_freq(const uint32_t& carrier_idx, const double& freq)
-{
-  if (!is_initialized) {
-    return;
-  }
-
-  // First release mapping
-  tx_channel_mapping.release_freq(carrier_idx);
-
-  // Map carrier index to physical channel
-  if (tx_channel_mapping.allocate_freq(carrier_idx, freq)) {
-    uint32_t physical_channel_idx = tx_channel_mapping.get_carrier_idx(carrier_idx);
-    log_h->info("Mapping RF channel %d to logical carrier %d on f_tx=%.1f MHz\n",
-                physical_channel_idx * nof_antennas,
-                carrier_idx,
-                freq / 1e6);
-    if (cur_tx_freqs[physical_channel_idx] != freq) {
-      if ((physical_channel_idx + 1) * nof_antennas <= nof_channels) {
-        cur_tx_freqs[physical_channel_idx] = freq;
-        for (uint32_t i = 0; i < nof_antennas; i++) {
-          srslte_rf_set_tx_freq(&rf_device, physical_channel_idx * nof_antennas + i, freq + freq_offset);
-        }
-      } else {
-        log_h->error("set_tx_freq: physical_channel_idx=%d for %d antennas exceeds maximum channels (%d)\n",
-                     physical_channel_idx,
-                     nof_antennas,
-                     nof_channels);
-      }
-    } else {
-      log_h->info("RF channel %d already on freq\n", physical_channel_idx * nof_antennas);
-    }
-  } else {
-    log_h->error("set_tx_freq: Could not allocate frequency %.1f MHz to carrier %d\n", freq / 1e6, carrier_idx);
-  }
-}
-
-void radio::set_tx_gain(const float& gain)
-{
-  if (!is_initialized) {
-    return;
-  }
-  srslte_rf_set_tx_gain(&rf_device, gain);
-}
-
-double radio::get_freq_offset()
-{
-  return freq_offset;
-}
-
-float radio::get_rx_gain()
-{
-  if (!is_initialized) {
-    return 0.0f;
-  }
-  return srslte_rf_get_rx_gain(&rf_device);
-}
-
-void radio::set_tx_srate(const double& srate)
-{
-  if (!is_initialized) {
-    return;
-  }
-  cur_tx_srate = srslte_rf_set_tx_srate(&rf_device, srate);
-
-  int nsamples = 0;
-  /* Set time advance for each known device if in auto mode */
-  if (tx_adv_auto) {
-
-    /* This values have been calibrated using the prach_test_usrp tool in srsLTE */
-
-    if (!strcmp(srslte_rf_name(&rf_device), "uhd_b200")) {
-
-      double srate_khz = round(cur_tx_srate / 1e3);
-      if (srate_khz == 1.92e3) {
-        // 6 PRB
-        nsamples = 57;
-      } else if (srate_khz == 3.84e3) {
-        // 15 PRB
-        nsamples = 60;
-      } else if (srate_khz == 5.76e3) {
-        // 25 PRB
-        nsamples = 92;
-      } else if (srate_khz == 11.52e3) {
-        // 50 PRB
-        nsamples = 120;
-      } else if (srate_khz == 15.36e3) {
-        // 75 PRB
-        nsamples = 80;
-      } else if (srate_khz == 23.04e3) {
-        // 100 PRB
-        nsamples = 160;
-      } else {
-        /* Interpolate from known values */
-        log_h->console(
-            "\nWarning TX/RX time offset for sampling rate %.0f KHz not calibrated. Using interpolated value\n\n",
-            cur_tx_srate);
-        nsamples = cur_tx_srate * (uhd_default_tx_adv_samples * (1 / cur_tx_srate) + uhd_default_tx_adv_offset_sec);
-      }
-
-    } else if (!strcmp(srslte_rf_name(&rf_device), "uhd_usrp2")) {
-      double srate_khz = round(cur_tx_srate / 1e3);
-      if (srate_khz == 1.92e3) {
-        nsamples = 14; // estimated
-      } else if (srate_khz == 3.84e3) {
-        nsamples = 32;
-      } else if (srate_khz == 5.76e3) {
-        nsamples = 43;
-      } else if (srate_khz == 11.52e3) {
-        nsamples = 54;
-      } else if (srate_khz == 15.36e3) {
-        nsamples = 65; // to calc
-      } else if (srate_khz == 23.04e3) {
-        nsamples = 80; // to calc
-      } else {
-        /* Interpolate from known values */
-        log_h->console(
-            "\nWarning TX/RX time offset for sampling rate %.0f KHz not calibrated. Using interpolated value\n\n",
-            cur_tx_srate);
-        nsamples = cur_tx_srate * (uhd_default_tx_adv_samples * (1 / cur_tx_srate) + uhd_default_tx_adv_offset_sec);
-      }
-
-    } else if (!strcmp(srslte_rf_name(&rf_device), "lime")) {
-      double srate_khz = round(cur_tx_srate / 1e3);
-      if (srate_khz == 1.92e3) {
-        nsamples = 28;
-      } else if (srate_khz == 3.84e3) {
-        nsamples = 51;
-      } else if (srate_khz == 5.76e3) {
-        nsamples = 74;
-      } else if (srate_khz == 11.52e3) {
-        nsamples = 78;
-      } else if (srate_khz == 15.36e3) {
-        nsamples = 86;
-      } else if (srate_khz == 23.04e3) {
-        nsamples = 102;
-      } else {
-        /* Interpolate from known values */
-        log_h->console(
-            "\nWarning TX/RX time offset for sampling rate %.0f KHz not calibrated. Using interpolated value\n\n",
-            cur_tx_srate);
-        nsamples = cur_tx_srate * (uhd_default_tx_adv_samples * (1 / cur_tx_srate) + uhd_default_tx_adv_offset_sec);
-      }
-
-    } else if (!strcmp(srslte_rf_name(&rf_device), "uhd_x300")) {
-
-      // In X300 TX/RX offset is independent of sampling rate
-      nsamples = 45;
-    } else if (!strcmp(srslte_rf_name(&rf_device), "bladerf")) {
-
-      double srate_khz = round(cur_tx_srate / 1e3);
-      if (srate_khz == 1.92e3) {
-        nsamples = 16;
-      } else if (srate_khz == 3.84e3) {
-        nsamples = 18;
-      } else if (srate_khz == 5.76e3) {
-        nsamples = 16;
-      } else if (srate_khz == 11.52e3) {
-        nsamples = 21;
-      } else if (srate_khz == 15.36e3) {
-        nsamples = 14;
-      } else if (srate_khz == 23.04e3) {
-        nsamples = 21;
-      } else {
-        /* Interpolate from known values */
-        log_h->console(
-            "\nWarning TX/RX time offset for sampling rate %.0f KHz not calibrated. Using interpolated value\n\n",
-            cur_tx_srate);
-        nsamples = blade_default_tx_adv_samples + blade_default_tx_adv_offset_sec * cur_tx_srate;
-      }
-    } else if (!strcmp(srslte_rf_name(&rf_device), "zmq")) {
-      nsamples = 0;
-    }
-  } else {
-    nsamples = tx_adv_nsamples;
-    log_h->console("Setting manual TX/RX offset to %d samples\n", nsamples);
-  }
-
-  // Calculate TX advance in seconds from samples and sampling rate
-  tx_adv_sec = nsamples / cur_tx_srate;
-  if (tx_adv_sec < 0) {
-    tx_adv_sec *= -1;
-    tx_adv_negative = true;
-  }
-}
-
-srslte_rf_info_t* radio::get_info()
-{
-  if (!is_initialized) {
-    return NULL;
-  }
-  return srslte_rf_get_info(&rf_device);
-}
-
-bool radio::get_metrics(rf_metrics_t* metrics)
-{
-  *metrics   = rf_metrics;
-  rf_metrics = {};
-  return true;
-}
-
-void radio::handle_rf_msg(srslte_rf_error_t error)
-{
-  if (!is_initialized) {
-    return;
-  }
-  if (error.type == srslte_rf_error_t::SRSLTE_RF_ERROR_OVERFLOW) {
-    rf_metrics.rf_o++;
-    rf_metrics.rf_error = true;
-    log_h->info("Overflow\n");
-
-    // inform PHY about overflow
-    phy->radio_overflow();
-  } else if (error.type == srslte_rf_error_t::SRSLTE_RF_ERROR_UNDERFLOW) {
-    rf_metrics.rf_u++;
-    rf_metrics.rf_error = true;
-    log_h->info("Underflow\n");
-  } else if (error.type == srslte_rf_error_t::SRSLTE_RF_ERROR_LATE) {
-    rf_metrics.rf_l++;
-    rf_metrics.rf_error = true;
-    log_h->info("Late (detected in %s)\n", error.opt ? "rx call" : "asynchronous thread");
-  } else if (error.type == srslte_rf_error_t::SRSLTE_RF_ERROR_RX) {
-    log_h->error("Fatal radio error occured.\n");
-    phy->radio_failure();
-  } else if (error.type == srslte_rf_error_t::SRSLTE_RF_ERROR_OTHER) {
-    std::string str(error.msg);
-    str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
-    str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
-    str.push_back('\n');
-    log_h->info("%s\n", str.c_str());
-  }
-}
-
-void radio::rf_msg_callback(void* arg, srslte_rf_error_t error)
-{
-  radio* h = (radio*)arg;
-  if (arg != nullptr) {
-    h->handle_rf_msg(error);
-  }
-}
-
-bool radio::map_channels(channel_mapping&           map,
-                         uint32_t                   sample_offset,
-                         const rf_buffer_interface& buffer,
-                         void*                      radio_buffers[SRSLTE_MAX_CHANNELS])
-{
-  // Discard channels not allocated, need to point to valid buffer
-  for (uint32_t i = 0; i < SRSLTE_MAX_CHANNELS; i++) {
-    radio_buffers[i] = zeros;
-  }
-  // Conversion from safe C++ std::array to the unsafe C interface. We must ensure that the RF driver implementation
-  // accepts up to SRSLTE_MAX_CHANNELS buffers
-  for (uint32_t i = 0; i < nof_carriers; i++) {
-    if (map.is_allocated(i)) {
-      uint32_t physical_idx = map.get_carrier_idx(i);
-      for (uint32_t j = 0; j < nof_antennas; j++) {
-        if (physical_idx * nof_antennas + j < SRSLTE_MAX_CHANNELS) {
-          cf_t* ptr = buffer.get(i, j, nof_antennas);
-
-          // Add sample offset only if it is a valid pointer
-          if (ptr != nullptr) {
-            ptr += sample_offset;
-          }
-
-          radio_buffers[physical_idx * nof_antennas + j] = ptr;
-        } else {
-          return false;
-        }
-      }
-    }
-  }
-
-  return true;
-}
-
-bool radio::config_rf_channels(const rf_args_t& args)
-{
-  // Generate RF-Channel to Carrier map
-  std::list<channel_mapping::channel_cfg_t> dl_rf_channels = {};
-  std::list<channel_mapping::channel_cfg_t> ul_rf_channels = {};
-
-  for (uint32_t i = 0; i < args.nof_carriers; i++) {
-    channel_mapping::channel_cfg_t c = {};
-    c.carrier_idx                    = i;
-
-    // Parse DL band for this channel
-    c.band.set(args.ch_rx_bands[i].min, args.ch_rx_bands[i].max);
-    dl_rf_channels.push_back(c);
-    log_h->console("Configuring physical DL channel %d with band-pass filter (%.1f, %.1f)\n",
-                i,
-                c.band.get_low(),
-                c.band.get_high());
-
-    // Parse UL band for this channel
-    c.band.set(args.ch_tx_bands[i].min, args.ch_tx_bands[i].max);
-    ul_rf_channels.push_back(c);
-    log_h->console("Configuring physical UL channel %d with band-pass filter (%.1f, %.1f)\n",
-                i,
-                c.band.get_low(),
-                c.band.get_high());
-  }
-
-  rx_channel_mapping.set_channels(dl_rf_channels);
-  tx_channel_mapping.set_channels(ul_rf_channels);
-  return true;
-}
-
-/***
- * Carrier mapping class
- */
-bool radio::channel_mapping::allocate_freq(const uint32_t& logical_ch, const float& freq)
-{
-  std::lock_guard<std::mutex> lock(mutex);
-
-  if (allocated_channels.count(logical_ch)) {
-    ERROR("allocate_freq: Carrier logical_ch=%d already allocated to channel=%d\n",
-          logical_ch,
-          allocated_channels[logical_ch].carrier_idx);
-    return false;
-  }
-
-  // Find first available channel that supports this frequency and allocated it
-  for (auto c = available_channels.begin(); c != available_channels.end(); ++c) {
-    if (c->band.contains(freq)) {
-      allocated_channels[logical_ch] = *c;
-      available_channels.erase(c);
-      return true;
-    }
-  }
-  ERROR("allocate_freq: No channels available for frequency=%.1f\n", freq);
-  return false;
-}
-
-bool radio::channel_mapping::release_freq(const uint32_t& logical_ch)
-{
-  std::lock_guard<std::mutex> lock(mutex);
-  if (allocated_channels.count(logical_ch)) {
-    available_channels.push_back(allocated_channels[logical_ch]);
-    allocated_channels.erase(logical_ch);
-    return true;
-  }
-  return false;
-}
-
-int radio::channel_mapping::get_carrier_idx(const uint32_t& logical_ch)
-{
-  std::lock_guard<std::mutex> lock(mutex);
-  if (allocated_channels.count(logical_ch)) {
-    return allocated_channels[logical_ch].carrier_idx;
-  }
-  return -1;
-}
-
-bool radio::channel_mapping::is_allocated(const uint32_t& logical_ch)
-{
-  std::lock_guard<std::mutex> lock(mutex);
-  return allocated_channels.count(logical_ch) > 0;
-}
-
-} // namespace srslte

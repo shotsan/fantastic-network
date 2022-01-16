@@ -1,4 +1,4 @@
-srsLTE and REDIS INTEGRATION EFFORT
+srsLTE and REDIS with Unix Sockets
 ========
 
 Please install SRSLTE code base and REDIS 
@@ -97,9 +97,18 @@ ping 172.16.0.1
 RUNNING THE CODE
 ========
 First start REDIS server 
+
+```
+redis-server path_to_config
+```
+
 On a different terminal in the same machine where you run srsenb, start redis client
 
-Enter PING and expect PONG to make sure things are working
+```
+ redis-cli -s /run/redis.sock
+````
+
+Type PING and expect PONG to make sure things are working
 
 Set gain value with below command 
 

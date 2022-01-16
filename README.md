@@ -5,6 +5,7 @@ Please install SRSLTE code base and REDIS
 
 REDIS INSTALLATION
 ========
+<<<<<<< ucsd
 
 Please follow steps from the below link
 
@@ -13,6 +14,31 @@ https://redis.io/topics/quickstart
 HIREDIS INSTALLATION
 ========
 
+https://github.com/redis/hiredis
+=======
+>>>>>>> ucsd
+
+Please follow steps from the below link
+
+https://redis.io/topics/quickstart
+
+HIREDIS INSTALLATION
+========
+
+<<<<<<< ucsd
+=======
+https://github.com/redis/hiredis
+
+```
+git clone https://github.com/redis/hiredis.git
+cd hiredis
+mkdir build
+cd build
+cmake ../
+make
+```
+
+>>>>>>> ucsd
 Download and build srsLTE: 
 ```
 Clone this repository

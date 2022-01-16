@@ -26,7 +26,7 @@ make
 
 Download and build srsLTE: 
 ```
-clone this repository
+https://github.com/harishkumar468/fantastic-network.git
 cd srsLTE
 mkdir build
 cd build

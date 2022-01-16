@@ -16,6 +16,7 @@ HIREDIS INSTALLATION
 https://github.com/redis/hiredis
 
 ```
+git clone https://github.com/redis/hiredis.git
 cd hiredis
 mkdir build
 cd build

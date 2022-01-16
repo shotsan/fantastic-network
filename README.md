@@ -13,16 +13,9 @@ https://redis.io/topics/quickstart
 HIREDIS INSTALLATION
 ========
 
-https://github.com/redis/hiredis
-
-It includes:
-  * srsUE - a complete SDR LTE UE application featuring all layers from PHY to IP
-  * srsENB - a complete SDR LTE eNodeB application 
-  * srsEPC - a light-weight LTE core network implementation with MME, HSS and S/P-GW
-
 Download and build srsLTE: 
 ```
-clone this repository
+Clone this repository
 cd srsLTE
 mkdir build
 cd build
@@ -40,6 +33,11 @@ srslte_install_configs.sh user
 
 This installs srsLTE and also copies the default srsLTE config files to
 the user's home directory (~/.config/srslte).
+
+It includes:
+  * srsUE - a complete SDR LTE UE application featuring all layers from PHY to IP
+  * srsENB - a complete SDR LTE eNodeB application 
+  * srsEPC - a light-weight LTE core network implementation with MME, HSS and S/P-GW
 
 
 Execution Instructions SRSLTE

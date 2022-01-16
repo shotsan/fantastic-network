@@ -96,10 +96,10 @@ ping 172.16.0.1
 
 RUNNING THE CODE
 ========
-First start REDIS server 
+First start REDIS server, configuration file redis.conf is attached with this repo, place in the desired path
 
 ```
-redis-server path_to_config
+redis-server path_to_config_file/redis.conf
 ```
 
 On a different terminal in the same machine where you run srsenb, start redis client

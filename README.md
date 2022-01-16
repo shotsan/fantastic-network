@@ -3,6 +3,17 @@ srsLTE and REDIS INTEGRATION EFFORT
 
 Please install SRSLTE code base and REDIS 
 
+REDIS INSTALLATION
+========
+
+Please follow steps from the below link
+
+https://redis.io/topics/quickstart
+
+HIREDIS INSTALLATION
+========
+
+https://github.com/redis/hiredis
 
 It includes:
   * srsUE - a complete SDR LTE UE application featuring all layers from PHY to IP
@@ -72,19 +83,6 @@ the default SGi IP address:
 ```
 ping 172.16.0.1
 ```
-
- 
- REDIS INSTALLATION
-========
-
-Please follow steps from the below link
-
-https://redis.io/topics/quickstart
-
-HIREDIS INSTALLATION
-========
-
-https://github.com/redis/hiredis
 
 RUNNING THE CODE
 ========

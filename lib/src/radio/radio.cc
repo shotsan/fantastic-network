@@ -51,10 +51,10 @@ radio::~radio()
     zeros = nullptr;
   }
 }
- unsigned int j, isunix = 0;
+ unsigned int j, isunix = 1;
     redisContext *c;
     redisReply *reply;
-    const char *hostname =  "127.0.0.1";
+    const char *hostname =  "/run/redis.sock";
 uint8_t current_tx_gain=0;
 int radio::init(const rf_args_t& args, phy_interface_radio* phy_)
 {

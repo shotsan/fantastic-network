@@ -56,7 +56,7 @@ It includes:
 
 Execution Instructions SRSLTE
 ----------------------
-
+### PLEASE FOLLOW THE ORDER OF INSTRUCTIONS
 ### srsEPC
 
 On machine 1, run srsEPC as follows:

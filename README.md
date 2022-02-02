@@ -28,15 +28,16 @@ Download and build srsLTE:
 ========
 
 ```
-Clone this repository
-cd srsLTE
+Clone repository 
+
+git checkout redix_with_unix
+cd fantastic-network
 mkdir build
 cd build
 cmake ../
 make
-make test
-```
 
+```
 Install srsLTE:
 
 ```
@@ -130,7 +131,8 @@ At TTI level (1ms), code checks if the tx gain has been changed, if so, it chang
 
 Known bugs: 
 ========
-Some of the debug prints are in time-sensitive loops that can affect performance, please ignore performance or delete
+
+First start redis server, client, srsepc before start srsenb_MIM as those dependencies for the current code
 
 Support:
 =====

@@ -1,17 +1,26 @@
-srsLTE and REDIS INTEGRATION EFFORT
-========
+This project explores controlling a 4G/5G Base Station in real-time. Software defined networks provide immense opportunities to control 
+several network parameters in real-time. Here we explore controlling Base Station configuration using an in memory database manager, Redis.
+For example in this project, we can control transmit gain of the base station in real-time from an external controller.
 
-Please install SRSLTE code base and REDIS 
+A redis server orchestrates communication between RAN Intelligent controller (redis-client) and base station.
+Base station has a redis client which listens for the parameters set by Ran Intelligent Controller. 
 
-REDIS INSTALLATION
-========
+All the nodes communicate using TCP sockets. This is a primitive solution, suffers for communication latencies that may impact functionality at times and to decrease communication latencies, we have to switch to some good interprocess communication methods.
+
+
+This project uses an open source implementation of 4G Network -- srsLTE/srsRAN. 
+
+
+#### Requirements
+ Redis, Hiredis 
+
+#### REDIS Installation
 
 Please follow steps from the below link
 
 https://redis.io/topics/quickstart
 
-HIREDIS INSTALLATION
-========
+#### HIREDIS Installation
 
 https://github.com/redis/hiredis
 
@@ -24,12 +33,14 @@ cmake ../
 make
 ```
 
-Download and build srsLTE: 
-========
+---
+
+#### Download and build RIC:
+This is a little involved process,  
 
 ```
 Clone this repository
-cd srsLTE
+cd fantastic network
 mkdir build
 cd build
 cmake ../
@@ -49,83 +60,40 @@ the user's home directory (~/.config/srslte).
 
 It includes:
   * srsUE - a complete SDR LTE UE application featuring all layers from PHY to IP
-  * srsENB - a complete SDR LTE eNodeB application 
+  * srsENB_RIC - a complete SDR LTE eNodeB application with redis client 
   * srsEPC - a light-weight LTE core network implementation with MME, HSS and S/P-GW
 
 
-Execution Instructions SRSLTE
-----------------------
-
-### srsEPC
-
-On machine 1, run srsEPC as follows:
-
-```
-sudo srsepc
-```
-
-Using the default configuration, this creates a virtual network interface
-named "srs_spgw_sgi" on machine 1 with IP 172.16.0.1. All connected UEs
-will be assigned an IP in this network.
-
-### srsENB
-
-Also on machine 1, but in another console, run srsENB as follows:
-
-```
-sudo srsenb_MIM
-```
-
-### srsUE
-
-On machine 2, run srsUE as follows:
-
-```
-sudo srsue_MIM
-```
-
-Using the default configuration, this creates a virtual network interface
-named "tun_srsue" on machine 2 with an IP in the network 172.16.0.x.
-Assuming the UE has been assigned IP 172.16.0.2, you may now exchange
-IP traffic with machine 1 over the LTE link. For example, run a ping to 
-the default SGi IP address:
-
-```
-ping 172.16.0.1
-```
-
-RUNNING THE CODE
+Running the system
 ========
-First start REDIS server 
-On a different terminal in the same machine where you run srsenb, start redis client
+* First start Redis server on machine 1
+  
+* Start `srsepc` on termnial 1 and `redis-cli` on terminal 2 of machine 1
+ 
+* on machine 1, open terminal 3, start `srsenb_RIC` 
 
-Enter PING and expect PONG to make sure things are working
 
-Set gain value with below command 
+* On terminal 2 enter PING and expect PONG to make sure things are working
+
+* On terminal 2, set gain value with below command 
 
 ```
 set gain [x]
 
 ```
 
-Start srsepc and srsenb
+* UL frequency  `ul_freq` in configuration file `enb.conf` of base station is hardcoded therefore it ignores values set in the configuration, prints in the terminal should point to the right file to edit to your desired frequency, default 2.8 GHZ
 
-```
-Here frequency of rx of enb is hardcoded, prints in the terminal should point to 
-the right file to edit to your desired frequency, default 2.8 GHZ
-
-```
-
-At TTI level (1ms), code checks if the tx gain has been changed, if so, it changes tx gain to the gain key set by redis client
+* At TTI level (1ms), srsenb_RIC checks if the tx gain has been changed, if so, it changes tx gain to the gain key set by redis client
 
 
 Known bugs: 
 ========
-Some of the debug prints are in time-sensitive loops that can affect performance, please ignore performance or delete
+Some of the debug prints are in time-sensitive loops that can affect performance, please ignore performance or delete debug prints
 
 Support:
 =====
-Slack-- Raini/Santosh
+Slack--Santosh
 
 
 

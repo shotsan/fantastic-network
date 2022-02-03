@@ -5,7 +5,7 @@ For example in this project, we can control transmit gain of the base station in
 A redis server orchestrates communication between RAN Intelligent controller (redis-client) and base station.
 Base station has a redis client which listens for the parameters set by Ran Intelligent Controller. 
 
-All the nodes communicate using TCP sockets. This is a primitive solution, suffers for communication latencies that may impact functionality at times and to decrease communication latencies, we have to switch to some good interprocess communication methods.
+All the nodes communicate using UNIX sockets. This is a primitive solution, suffers for communication latencies that may impact functionality at times and to decrease communication latencies, we have to switch to some good interprocess communication methods.
 
 
 This project uses an open source implementation of 4G Network -- srsLTE/srsRAN. 

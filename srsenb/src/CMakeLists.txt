@@ -34,8 +34,8 @@ endif (RPATH)
 
 add_library(enb_cfg_parser STATIC parser.cc enb_cfg_parser.cc)
 
-add_executable(srsenb_MIM main.cc enb.cc metrics_stdout.cc metrics_csv.cc)
-target_link_libraries(srsenb_MIM  srsenb_phy
+add_executable(srsenb_RIC main.cc enb.cc metrics_stdout.cc metrics_csv.cc)
+target_link_libraries(srsenb_RIC  srsenb_phy
                               srsenb_stack
                               srsenb_upper
                               srsenb_mac
@@ -69,4 +69,4 @@ else(NOT ${BUILDENB_CMD} STREQUAL "")
   message(STATUS "No post-build-ENB command defined")
 endif (NOT ${BUILDENB_CMD} STREQUAL "")
 
-install(TARGETS srsenb_MIM DESTINATION ${RUNTIME_DIR})
+install(TARGETS srsenb_RIC DESTINATION ${RUNTIME_DIR})

@@ -3,14 +3,14 @@ srsLTE and REDIS with Unix Sockets
 
 Please install SRSLTE code base and REDIS 
 
-REDIS INSTALLATION
+REDIS Installation
 ========
 
 Please follow steps from the below link
 
 https://redis.io/topics/quickstart
 
-HIREDIS INSTALLATION
+HIREDIS Installation
 ========
 
 https://github.com/redis/hiredis

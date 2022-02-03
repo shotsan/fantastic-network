@@ -25,6 +25,7 @@ https://redis.io/topics/quickstart
 https://github.com/redis/hiredis
 
 ```
+git checkout redis_with_unix
 git clone https://github.com/redis/hiredis.git
 cd hiredis
 mkdir build

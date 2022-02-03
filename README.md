@@ -74,7 +74,7 @@ will be assigned an IP in this network.
 Also on machine 1, but in another console, run srsENB as follows:
 
 ```
-sudo srsenb_MIM
+sudo srsenb_RIC
 ```
 
 ### srsUE
@@ -82,7 +82,7 @@ sudo srsenb_MIM
 On machine 2, run srsUE as follows:
 
 ```
-sudo srsue_MIM
+sudo srsue
 ```
 
 Using the default configuration, this creates a virtual network interface
@@ -132,7 +132,7 @@ At TTI level (1ms), code checks if the tx gain has been changed, if so, it chang
 Known bugs: 
 ========
 
-First start redis server, client, srsepc before start srsenb_MIM as those dependencies for the current code
+First start redis server, client, srsepc before firing up srsenb_RIC as those are dependencies for the current code.
 
 Support:
 =====

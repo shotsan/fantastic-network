@@ -1,3 +1,6 @@
+
+![](https://komarev.com/ghpvc/?username=shotsan)
+
 This project explores controlling a 4G/5G Base Station in real-time. Software defined networks provide immense opportunities to control 
 several network parameters in real-time. Here we explore controlling Base Station configuration using an in memory database manager, Redis.
 For example in this project, we can control transmit gain of the base station in real-time from an external controller.
@@ -97,4 +100,4 @@ Slack--Santosh
 
 
 
-![](https://komarev.com/ghpvc/?username=your-github-username)
+

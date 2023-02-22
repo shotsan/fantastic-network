@@ -1,18 +1,14 @@
-
-![](https://komarev.com/ghpvc/?username=shotsan)
-
-This project explores controlling a 4G/5G Base Station in real-time. Software defined networks provide immense opportunities to control 
-several network parameters in real-time. Here we explore controlling Base Station configuration using an in memory database manager, Redis.
+This project explores controlling a 4G/5G Base Station in real-time remotely. Software defined networks provide immense opportunities to control 
+several network parameters in real-time. In this project, we control the Base Station configuration using an in memory database manager, Redis.
 For example in this project, we can control transmit gain of the base station in real-time from an external controller.
 
-A redis server orchestrates communication between RAN Intelligent controller (redis-client) and base station.
-Base station has a redis client which listens for the parameters set by Ran Intelligent Controller. 
+A redis server orchestrates communication between RAN Intelligent controller (redis-client) and base station (eNb/gNb).
+Base station has a redis client which listens to parameters set by RAN Intelligent Controller. 
 
-All the nodes communicate using TCP sockets. This is a primitive solution, suffers for communication latencies that may impact functionality at times and to decrease communication latencies, we have to switch to some good interprocess communication methods.
-
+All the nodes communicate using TCP sockets. This is a primitive solution, suffers from communication latencies that may impact functionality at times.
+Thats for a later discussion. Maybe Remote direct memory access. RDMA!
 
 This project uses an open source implementation of 4G Network -- srsLTE/srsRAN. 
-
 
 #### Requirements
  Redis, Hiredis 
@@ -38,7 +34,7 @@ make
 
 ---
 
-#### Download and build RIC:
+#### Download and build RAN-RIC:
 This is a little involved process,  
 
 ```
